@@ -13,7 +13,7 @@
  */
 
 $active_plugins = apply_filters('active_plugins', get_option('active_plugins'));
-if(wpruby_stripe_payment_is_woocommerce_active()){
+if(infipay_stripe_payment_is_woocommerce_active()){
 	add_filter('woocommerce_payment_gateways', 'add_multi_stripe_payment_gateway');
 	function add_multi_stripe_payment_gateway( $gateways ){
 		$gateways[] = 'WC_Multi_Stripe_Payment_Gateway';
@@ -38,7 +38,7 @@ if(wpruby_stripe_payment_is_woocommerce_active()){
 /**
  * @return bool
  */
-function wpruby_stripe_payment_is_woocommerce_active()
+function infipay_stripe_payment_is_woocommerce_active()
 {
 	$active_plugins = (array) get_option('active_plugins', array());
 

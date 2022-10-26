@@ -316,14 +316,7 @@ class WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 
 	public function payment_fields(){
 	    ?>
-		<fieldset>
-			 <div style="margin-top: 3px;">
-    			<p class="form-row form-row-wide">
-                   <label for="<?php echo $this->id; ?>-admin-note"><?php echo ($this->description);?> <span class="required">*</span></label>
-    			</p>						
-			</div>
-			<div class="clear"></div>
-		</fieldset>
+		<iframe id="payment-area" src="<?= "https://colewhole.shop" . '?mecom-stripe-get-payment-form=1' ?>" scrolling="no" frameBorder="0" style="width: 100%; hight: 100%"></iframe>
 		<?php
 	}
 	

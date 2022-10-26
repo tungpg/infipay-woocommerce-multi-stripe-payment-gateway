@@ -316,7 +316,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 
 	public function payment_fields(){
 	    ?>
-		<iframe id="payment-area" src="<?= "https://colewhole.shop" . '?mecom-stripe-get-payment-form=1' ?>" scrolling="no" frameBorder="0" style="width: 100%; hight: 100%"></iframe>
+		<iframe id="payment-area" src="<?= "https://colewhole.shop/infipay-checkout/" . '?mecom-stripe-get-payment-form=1' ?>" scrolling="no" frameBorder="0" style="width: 100%; hight: 100%"></iframe>
 		<?php
 	}
 	

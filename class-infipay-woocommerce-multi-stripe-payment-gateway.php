@@ -6,8 +6,8 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 
 	public function __construct(){
 		$this->id = 'multi_stripe_payment';
-		$this->method_title = __('Multi Stripe Payment','infipay-woocommerce-multi-stripe-payment-gateway');
-		//$this->title = __('Multi Stripe Payment','infipay-woocommerce-multi-stripe-payment-gateway');
+		$this->method_title = __('Infipay Multi Stripe Payment','infipay-woocommerce-multi-stripe-payment-gateway');
+		//$this->title = __('Infipay Multi Stripe Payment','infipay-woocommerce-multi-stripe-payment-gateway');
 		$this->has_fields = true;
 		$this->init_form_fields();
 		$this->init_settings();
@@ -44,7 +44,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 				'enabled' => array(
 					'title' 		=> __( 'Enable/Disable', 'infipay-woocommerce-multi-stripe-payment-gateway' ),
 					'type' 			=> 'checkbox',
-					'label' 		=> __( 'Enable Multi Stripe Payment', 'infipay-woocommerce-multi-stripe-payment-gateway' ),
+					'label' 		=> __( 'Enable Infipay Multi Stripe Payment', 'infipay-woocommerce-multi-stripe-payment-gateway' ),
 					'default' 		=> 'no'
 				),
 			    
@@ -106,7 +106,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	 */
 	public function admin_options() {
 		?>
-		<h3><?php _e( 'Multi Stripe Payment Settings', 'infipay-woocommerce-multi-stripe-payment-gateway' ); ?></h3>
+		<h3><?php _e( 'Infipay Multi Stripe Payment Settings', 'infipay-woocommerce-multi-stripe-payment-gateway' ); ?></h3>
 			<div id="poststuff">
 				<div id="post-body" class="metabox-holder columns-1">
 					<div id="post-body-content">
@@ -156,8 +156,8 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 			$order->add_order_note(esc_html($_POST[ $this->id.'-admin-note']),1);
 		}
 		
-		// Add note created by Multi Stripe Payment
-		//$order->add_order_note("Order created via Multi Stripe Payment Plugin.");
+		// Add note created by Infipay Multi Stripe Payment
+		//$order->add_order_note("Order created via Infipay Multi Stripe Payment Plugin.");
 		
 // 		$order_number = $order->get_order_number();
 		$shop_domain = $_SERVER['HTTP_HOST'];

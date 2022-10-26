@@ -1,7 +1,7 @@
 # Loco Gettext template
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce Multi Stripe Payment Gateway v1.0.0\n"
+"Project-Id-Version: Infipay WooCommerce Multi Stripe Payment Gateway v1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-08-28 19:12+0200\n"
 "POT-Revision-Date: Fri Aug 28 2015 19:09:58 GMT+0200 (Central European Standard Time)\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: /class-infipay-woocommerce-multi-stripe-payment-gateway.php:10 /class-woocommerce-multi-stripe-
 #: payment-gateway.php:11 /class-infipay-woocommerce-multi-stripe-payment-gateway.php:49
-msgid "Multi Stripe Payment"
+msgid "Infipay Multi Stripe Payment"
 msgstr "Ostala plaćanja"
 
 #: /class-infipay-woocommerce-multi-stripe-payment-gateway.php:40
@@ -29,7 +29,7 @@ msgid "Enable/Disable"
 msgstr "Omogući/Onemogući"
 
 #: /class-infipay-woocommerce-multi-stripe-payment-gateway.php:42
-msgid "Enable Multi Stripe Payment"
+msgid "Enable Infipay Multi Stripe Payment"
 msgstr "Omogući ostala plaćanja"
 
 #: /class-infipay-woocommerce-multi-stripe-payment-gateway.php:46
@@ -49,7 +49,7 @@ msgid "The message which you want it to appear to the customer in the checkout p
 msgstr "Poruka koju želite prikazati kupcu na stranici Blagajna (Checkout)."
 
 #: /class-infipay-woocommerce-multi-stripe-payment-gateway.php:77
-msgid "Multi Stripe Payment Settings"
+msgid "Infipay Multi Stripe Payment Settings"
 msgstr "Postavke Ostala plaćanja"
 
 #: /class-infipay-woocommerce-multi-stripe-payment-gateway.php:96

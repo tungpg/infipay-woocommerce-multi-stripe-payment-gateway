@@ -1,6 +1,6 @@
 <?php 
 
-class WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
+class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 
     private $order_status;
 

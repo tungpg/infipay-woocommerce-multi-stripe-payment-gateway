@@ -320,7 +320,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    //$get_pp_credential_tool_url = "https://" . $this->multi_stripe_payment_server_domain . "/index.php?r=multi-stripe-payment/get-stripe-credential";
 	    global $woocommerce;
 	    
-	    $cart_total = floatval( preg_replace( '#[^\d.]#', '', $woocommerce->cart->get_cart_total() ) );
+	    $cart_total = preg_replace( '#[^\d.]#', '', $woocommerce->cart->get_cart_total() );
 	    echo "--------";
 	    echo $cart_total;
 	    echo "<br/>";

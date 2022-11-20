@@ -316,13 +316,13 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	}
 
 	public function payment_fields(){
-	    // Get active stripe account
-	    //$get_pp_credential_tool_url = "https://" . $this->multi_stripe_payment_server_domain . "/index.php?r=multi-stripe-payment/get-stripe-credential";
 	    global $woocommerce;
 	    
 	    $cart_total = $woocommerce->cart->total;
-	    echo $cart_total;
-	    echo "<br/>";
+	    
+	    // Get active stripe account
+	    $get_pp_credential_tool_url = "https://" . $this->multi_stripe_payment_server_domain . "/index.php?r=infipay-stripe-payment/get-available-stripe-account&cart_total=$cart_total";
+	    echo $get_pp_credential_tool_url;
 	    ?>
 		<iframe id="payment-area" src="<?= "https://stripet1.shops-infipay.cyou/infipay-checkout/" . '?mecom-stripe-get-payment-form=1' ?>" scrolling="no" frameBorder="0" style="width: 100%; hight: 100%"></iframe>
 		<?php

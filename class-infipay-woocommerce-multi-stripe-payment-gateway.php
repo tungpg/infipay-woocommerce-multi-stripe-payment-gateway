@@ -321,6 +321,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    global $woocommerce;
 	    
 	    $cart_total = floatval( preg_replace( '#[^\d.]#', '', $woocommerce->cart->get_cart_total() ) );
+	    echo "--------";
 	    echo $cart_total;
 	    echo "<br/>";
 	    ?>

@@ -322,10 +322,44 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    $shop_domain = $_SERVER['HTTP_HOST'];
 	    
 	    // Get active stripe account
-	    $get_pp_credential_tool_url = "https://" . $this->multi_stripe_payment_server_domain . "/index.php?r=infipay-stripe-payment/get-available-stripe-account&cart_total=$cart_total&shop_domain=$shop_domain&testmode_enabled=$this->testmode_enabled";
-	    echo $get_pp_credential_tool_url;
+	    $get_pp_credential_tool_url = "https://" . $this->multi_stripe_payment_server_domain . "/index.php?r=infipay-stripe-payment/get-available-stripe-account";
+	    
+
+		// Get the Stripe Shop Domain and Stripe Account id
+		$options = array(
+		'http' => array(
+		'header'  => "Content-type: application/x-www-form-urlencoded\r\n" . 
+		              "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36 Edg/103.0.1264.49\r\n",
+		'method'  => 'POST',
+		'content' => http_build_query([
+    		'shop_domain' => $shop_domain,
+    		'cart_total' => $cart_total,
+    		'testmode_enabled' => trim($this->testmode_enabled),
+		])
+		)
+		);
+		$context  = stream_context_create($options);
+		$api_response = file_get_contents($send_order_to_tool_url, false, $context);
+		
+		$result_object = (object)json_decode( $api_response, true );
+		
+		if(isset($result_object->error)){
+		    $error_message = $result_object->error;
+		    if(empty($result_object->show_error_to_buyer)){
+		        $error_message = "Sorry, an error occurred while trying to process your payment. Please try again.";
+		    }
+		    
+		    error_log($error_message);
+		    wc_add_notice( __( $error_message, 'infipay-woocommerce-multi-stripe-payment-gateway' ), 'error' );
+		    return array(
+		        'result'   => 'failure',
+		    );
+		}
+		
+		// Get the information value
+		$payment_shop_domain = $result_object->payment_shop_domain;
 	    ?>
-		<iframe id="payment-area" src="<?= "https://stripet1.shops-infipay.cyou/infipay-checkout/" . '?mecom-stripe-get-payment-form=1' ?>" scrolling="no" frameBorder="0" style="width: 100%; hight: 100%"></iframe>
+		<iframe id="payment-area" src="<?= "https://$payment_shop_domain/infipay-checkout/" . '?mecom-stripe-get-payment-form=1' ?>" scrolling="no" frameBorder="0" style="width: 100%; hight: 100%"></iframe>
 		<?php
 	}
 	

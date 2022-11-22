@@ -346,7 +346,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		if(isset($result_object->error)){
 		    $error_message = $result_object->error;
 		    if(empty($result_object->show_error_to_buyer)){
-		        $error_message = "Sorry, an error occurred while trying to process your payment. Please try again.";
+		        $error_message = "This payment method is currently unavailable. Please choose another payment method.";
 		    }
 		    
 		    error_log($error_message);

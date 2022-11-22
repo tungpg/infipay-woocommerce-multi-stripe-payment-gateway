@@ -322,7 +322,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    $shop_domain = $_SERVER['HTTP_HOST'];
 	    
 	    // Get active stripe account
-	    $get_pp_credential_tool_url = "https://" . $this->multi_stripe_payment_server_domain . "/index.php?r=infipay-stripe-payment/get-available-stripe-account";
+	    $get_available_stripe_account_url = "https://" . $this->multi_stripe_payment_server_domain . "/index.php?r=infipay-stripe-payment/get-available-stripe-account";
 	    
 
 		// Get the Stripe Shop Domain and Stripe Account id
@@ -339,7 +339,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		)
 		);
 		$context  = stream_context_create($options);
-		$api_response = file_get_contents($send_order_to_tool_url, false, $context);
+		$api_response = file_get_contents($get_available_stripe_account_url, false, $context);
 		
 		$result_object = (object)json_decode( $api_response, true );
 		

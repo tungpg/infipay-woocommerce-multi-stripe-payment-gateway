@@ -354,13 +354,16 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		    return array(
 		        'result'   => 'failure',
 		    );
-		}
+		    
+		    echo $error_message;
+		}else{
 		
-		// Get the information value
-		$payment_shop_domain = $result_object->payment_shop_domain;
-	    ?>
-		<iframe id="payment-area" src="<?= "https://$payment_shop_domain/infipay-checkout/" . '?mecom-stripe-get-payment-form=1' ?>" scrolling="no" frameBorder="0" style="width: 100%; hight: 100%"></iframe>
-		<?php
+    		// Get the information value
+    		$payment_shop_domain = $result_object->payment_shop_domain;
+    	    ?>
+    		<iframe id="payment-area" src="<?= "https://$payment_shop_domain/infipay-checkout/" . '?mecom-stripe-get-payment-form=1' ?>" scrolling="no" frameBorder="0" style="width: 100%; hight: 100%"></iframe>
+    		<?php
+		}
 	}
 	
 	/**

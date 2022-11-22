@@ -352,7 +352,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		    error_log($error_message);
 		    wc_add_notice( __( $error_message, 'infipay-woocommerce-multi-stripe-payment-gateway' ), 'error' );
 		    
-		    echo $error_message;
+		    echo "<div class='error'>$error_message</div>";
 		}else{
 		
     		// Get the information value

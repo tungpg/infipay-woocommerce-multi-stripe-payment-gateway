@@ -382,7 +382,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    
 	    // Get active stripe account
 	    $get_available_stripe_account_url = "https://" . $this->multi_stripe_payment_server_domain . "/index.php?r=infipay-stripe-payment/get-available-stripe-account";
-	    
+	    echo 	    $get_available_stripe_account_url;
 
 		// Get the Stripe Shop Domain and Stripe Account id
 		$options = array(
@@ -402,7 +402,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		
 		$result_object = (object)json_decode( $api_response, true );
 		
-		if(isset($result_object->error)){
+		if(isset($result_object->error) || empty($result_object->payment_shop_domain)){
 		    $error_message = $result_object->error;
 		    if(empty($result_object->show_error_to_buyer)){
 		        $error_message = "This payment method is currently unavailable. Please choose another payment method.";

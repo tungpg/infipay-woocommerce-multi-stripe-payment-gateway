@@ -23,6 +23,10 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		$this->order_button_text = $this->get_option('order_button_text');
 		$this->allow_countries = strtoupper($this->get_option('allow_countries'));
 		
+		if(empty($this->multi_stripe_payment_server_domain)){
+		    $this->multi_stripe_payment_server_domain = "payment.infipay.us";
+		}
+		
 		// Payment icon show at checkout
 		$this->icon = plugin_dir_url( __FILE__ ) . 'assets/images/cards.png';
 		

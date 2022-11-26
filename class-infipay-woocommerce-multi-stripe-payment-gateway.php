@@ -414,7 +414,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		    echo "<div style='color:red'>$error_message</div>";
 		}else{
 		    $this->active_stripe_account = $result_object;
-		    
+		    print_r($result_object);
     		// Get the information value
     		$payment_shop_domain = $result_object->payment_shop_domain;
     	    ?>

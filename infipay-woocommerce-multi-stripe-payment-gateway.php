@@ -31,8 +31,8 @@ if(infipay_stripe_payment_is_woocommerce_active()){
 	}
 
 	
-	add_action('wp_footer', 'action_stripe_wp_footer', 10, 1);
-	function action_stripe_wp_footer()
+	add_action('wp_footer', 'infipay_action_stripe_wp_footer', 10, 1);
+	function infipay_action_stripe_wp_footer()
 	{
 	    if (is_checkout()) {
 	        $gateways = WC()->payment_gateways->get_available_payment_gateways();

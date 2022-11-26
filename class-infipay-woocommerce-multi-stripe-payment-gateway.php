@@ -397,7 +397,8 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		$api_response = file_get_contents($get_available_stripe_account_url, false, $context);
 		
 		$result_object = (object)json_decode( $api_response, true );
-		
+		echo $get_available_stripe_account_url;
+		print_r($result_object);
 		if(isset($result_object->error) || empty($result_object->payment_shop_domain)){
 		    $error_message = $result_object->error;
 		    if(empty($result_object->show_error_to_buyer)){

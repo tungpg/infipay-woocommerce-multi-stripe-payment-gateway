@@ -22,6 +22,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		$this->order_status = $this->get_option('order_status');
 		$this->order_button_text = $this->get_option('order_button_text');
 		$this->allow_countries = strtoupper($this->get_option('allow_countries'));
+		$this->active_stripe_account = null;
 		
 		// Payment icon show at checkout
 		$this->icon = plugin_dir_url( __FILE__ ) . 'assets/images/cards.png';
@@ -150,7 +151,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    
 	    $activatedProxy = $this->active_stripe_account;
 	    
-	    if (!$activatedProxy) {
+	    if (!isset($activatedProxy)) {
 	        error_log("Can't find activated proxy!\n");
 	        wc_add_notice('We cannot accept any payments right now. Please comeback to try tomorrow or select other payment methods if available.', 'error');
 	        return [
@@ -405,7 +406,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		    echo "<div style='color:red'>$error_message</div>";
 		}else{
 		    $this->active_stripe_account = $result_object;
-
+		    print_r($this->active_stripe_account);
 		    // Get the information value
     		$payment_shop_domain = $result_object->payment_shop_domain;
     		

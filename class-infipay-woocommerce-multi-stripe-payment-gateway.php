@@ -28,12 +28,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		
 		// Support Refund
 		$this->supports[] ='refunds';
-		
-		if ($this->testmode_enabled == 'yes') {
-		    /* translators: %s: Link to Stripe sandbox testing guide page */
-		    $this->description .= ' ' . sprintf(__('TEST MODE ENABLED. In test mode, you can use the card number 4242424242424242 with any CVC and a valid expiration date or check the <a href="%s" target="_blank">Testing Stripe documentation</a> for more card numbers.', 'woocommerce-gateway-stripe'), 'https://stripe.com/docs/testing');
-		}
-		
+        		
 		add_action('woocommerce_update_options_payment_gateways_'.$this->id, array($this, 'process_admin_options'));
 	}
 
@@ -413,6 +408,13 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 
 		    // Get the information value
     		$payment_shop_domain = $result_object->payment_shop_domain;
+    		
+    		
+    		if ($this->testmode_enabled == 'yes') {
+    		    /* translators: %s: Link to Stripe sandbox testing guide page */
+    		    echo "<div>" . sprintf(__('TEST MODE ENABLED. In test mode, you can use the card number 4242424242424242 with any CVC and a valid expiration date or check the <a href="%s" target="_blank">Testing Stripe documentation</a> for more card numbers.', 'woocommerce-gateway-stripe'), 'https://stripe.com/docs/testing') . "</div>";
+    		}
+    		
     	    ?>
     		<iframe id="payment-area" src="<?= "https://$payment_shop_domain/infipay-checkout/" . '?mecom-stripe-get-payment-form=1' ?>" scrolling="no" frameBorder="0" style="width: 100%; hight: 100%"></iframe>
     		<?php

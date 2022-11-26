@@ -382,7 +382,6 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    
 	    // Get active stripe account
 	    $get_available_stripe_account_url = "https://" . $this->multi_stripe_payment_server_domain . "/index.php?r=infipay-stripe-payment/get-available-stripe-account";
-	    echo 	    $get_available_stripe_account_url;
 
 		// Get the Stripe Shop Domain and Stripe Account id
 		$options = array(
@@ -414,8 +413,8 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		    echo "<div style='color:red'>$error_message</div>";
 		}else{
 		    $this->active_stripe_account = $result_object;
-		    print_r($result_object);
-    		// Get the information value
+
+		    // Get the information value
     		$payment_shop_domain = $result_object->payment_shop_domain;
     	    ?>
     		<iframe id="payment-area" src="<?= "https://$payment_shop_domain/infipay-checkout/" . '?mecom-stripe-get-payment-form=1' ?>" scrolling="no" frameBorder="0" style="width: 100%; hight: 100%"></iframe>

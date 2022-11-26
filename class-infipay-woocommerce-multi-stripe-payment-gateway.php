@@ -24,7 +24,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		$this->allow_countries = strtoupper($this->get_option('allow_countries'));
 		
 		// Payment icon show at checkout
-		$this->icon = plugin_dir_url( __FILE__ ) . 'assets/images/stripe-cards.png';
+		$this->icon = plugin_dir_url( __FILE__ ) . 'assets/images/cards.png';
 		
 		// Support Refund
 		$this->supports[] ='refunds';

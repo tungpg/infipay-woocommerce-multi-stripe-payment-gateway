@@ -3,7 +3,7 @@
 class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 
     private $order_status;
-    private $active_stripe_account;
+    public $active_stripe_account;
 
 	public function __construct(){
 		$this->id = 'infipay_multi_stripe_payment';

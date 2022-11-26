@@ -29,7 +29,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		// Support Refund
 		$this->supports[] ='refunds';
 		
-		if ($this->testmode_enabled) {
+		if ($this->testmode_enabled == 'yes') {
 		    /* translators: %s: Link to Stripe sandbox testing guide page */
 		    $this->description .= ' ' . sprintf(__('TEST MODE ENABLED. In test mode, you can use the card number 4242424242424242 with any CVC and a valid expiration date or check the <a href="%s" target="_blank">Testing Stripe documentation</a> for more card numbers.', 'woocommerce-gateway-stripe'), 'https://stripe.com/docs/testing');
 		}

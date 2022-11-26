@@ -30,7 +30,21 @@ if(infipay_stripe_payment_is_woocommerce_active()){
 	  load_plugin_textdomain( 'infipay-woocommerce-multi-stripe-payment-gateway', FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
 	}
 
-
+	
+	add_action('wp_footer', 'action_stripe_wp_footer', 10, 1);
+	function action_stripe_wp_footer()
+	{
+	    if (is_checkout()) {
+	        $gateways = WC()->payment_gateways->get_available_payment_gateways();
+	        if (isset($gateways['infipay_multi_stripe_payment']->enabled) && $gateways['infipay_multi_stripe_payment']->enabled == 'yes') {
+	            echo '<div id="cs-stripe-loader">
+                  <div class="cs-stripe-spinnerWithLockIcon cs-stripe-spinner" aria-busy="true">
+                      <p>We\'re processing your payment...<br/>Please <b>DO NOT</b> close this page!</p>
+                  </div>
+            </div>';
+	        }
+	    }
+	}
 
 }
 

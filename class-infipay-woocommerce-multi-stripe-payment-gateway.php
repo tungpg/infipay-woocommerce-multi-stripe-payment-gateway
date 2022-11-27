@@ -6,7 +6,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
     private $order_status;
 
 	public function __construct(){
-		$this->id = 'infipay_multi_stripe_payment';
+		$this->id = 'infipay_stripe';
 		$this->method_title = __('Infipay Multi Stripe Payment','infipay-woocommerce-multi-stripe-payment-gateway');
 		//$this->title = __('Infipay Multi Stripe Payment','infipay-woocommerce-multi-stripe-payment-gateway');
 		$this->has_fields = true;
@@ -188,7 +188,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    
 	    
 	    // Log processing proxyUrl
-	    $order->add_order_note(sprintf(__('Starting checkout with Stripe proxy %s', 'mecom'), $activatedProxy->payment_shop_domain), 0, false);
+	    $order->add_order_note(sprintf(__('Starting checkout with Stripe proxy %s', 'infipay'), $activatedProxy->payment_shop_domain), 0, false);
 	    
 	    $items = [];
 	    
@@ -208,14 +208,14 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	            "total" => $amount
 	        ];
 	    }
-	    $response = wp_remote_post("https://" . $activatedProxy->payment_shop_domain . '/infipay-checkout/?mecom-stripe-make-payment=1', [
+	    $response = wp_remote_post("https://" . $activatedProxy->payment_shop_domain . '/infipay-checkout/?infipay-stripe-make-payment=1', [
 	        'timeout' => 5 * 60,
 	        'headers' => [
 	            'Content-Type' => 'application/json',
 	        ],
 	        'body' => json_encode([
 	            'payment_intent' => $order->get_transaction_id(),
-	            'payment_method_id' => 'card',
+	            'payment_method_id' => $_POST['infipay-stripe-payment-method-id'],
 	            'order_id' => $order->get_id(),
 	            'order_invoice' => "ABC-" . $order->get_order_number(),
 	            'order_items' => $items,
@@ -257,9 +257,9 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	        $order->reduce_order_stock();
 	        
 	        //Save the processed proxy for this order (using for refund later)
-	        $order->add_order_note(sprintf(__('Stripe charged by proxy %s', 'mecom'), $activatedProxy->payment_shop_domain), 0, false);
+	        $order->add_order_note(sprintf(__('Stripe charged by proxy %s', 'infipay'), $activatedProxy->payment_shop_domain), 0, false);
 	        // some notes to customer (replace true with false to make it private)
-	        $order->add_order_note(sprintf(__('Stripe Checkout charge complete (Payment Intent ID: %s)', 'mecom'), $paymentIntent->id));
+	        $order->add_order_note(sprintf(__('Stripe Checkout charge complete (Payment Intent ID: %s)', 'infipay'), $paymentIntent->id));
 	        
 	        update_post_meta($order->get_id(), '_transaction_id', $paymentIntent->id);
 	        update_post_meta($order->get_id(), METAKEY_STRIPE_PROXY_URL, $activatedProxy->payment_shop_domain);
@@ -277,12 +277,12 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	        // Empty cart
 	        $order->update_status('failed');
 	        if($body->code === 'domain_whitelist_not_allow') {
-	            $order->add_order_note(sprintf(__('Stripe charged ERROR by proxy %s, ERROR message: %s', 'mecom'),
+	            $order->add_order_note(sprintf(__('Stripe charged ERROR by proxy %s, ERROR message: %s', 'infipay'),
 	                $activatedProxy->payment_shop_domain,
 	                'Domain whitelist is required'
 	                ));
 	        } else if($body->code === 'customer_zipcode_not_allow') {
-	            $order->add_order_note(sprintf(__('Stripe charged ERROR by proxy %s, ERROR message: %s', 'mecom'),
+	            $order->add_order_note(sprintf(__('Stripe charged ERROR by proxy %s, ERROR message: %s', 'infipay'),
 	                $activatedProxy->payment_shop_domain,
 	                "Customer's zipcode is blacklisted"
 	                ));
@@ -295,7 +295,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	                $paymentIntentId = $err->payment_intent->id;
 	                update_post_meta($order->get_id(), '_transaction_id', $paymentIntentId);
 	            }
-	            $order->add_order_note(sprintf(__('Stripe charged ERROR by proxy %s, ERROR message: %s, Payment Intent ID: %s', 'mecom'),
+	            $order->add_order_note(sprintf(__('Stripe charged ERROR by proxy %s, ERROR message: %s, Payment Intent ID: %s', 'infipay'),
 	                $activatedProxy->payment_shop_domain,
 	                is_string($err) ?: $err->message,
 	                $paymentIntentId
@@ -362,11 +362,11 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    if ('no' === $this->enabled) {
 	        return;
 	    }
-	    wp_register_style('infipay_multi_stripe_payment_styles', plugins_url('assets/css/styles.css', __FILE__), [], OPT_MECOM_STRIPE_VERSION);
-	    wp_enqueue_style('infipay_multi_stripe_payment_styles');
+	    wp_register_style('infipay_stripe_styles', plugins_url('assets/css/styles.css', __FILE__), [], OPT_MECOM_STRIPE_VERSION);
+	    wp_enqueue_style('infipay_stripe_styles');
 	    
-	    wp_register_script('infipay_multi_stripe_payment_js', plugins_url('assets/js/checkout_hook.js', __FILE__), array('jquery'), OPT_MECOM_STRIPE_VERSION, true);
-	    wp_enqueue_script('infipay_multi_stripe_payment_js');
+	    wp_register_script('infipay_stripe_js', plugins_url('assets/js/checkout_hook.js', __FILE__), array('jquery'), OPT_MECOM_STRIPE_VERSION, true);
+	    wp_enqueue_script('infipay_stripe_js');
 	}
 	
 	public function payment_fields(){
@@ -421,7 +421,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
     		}
     		
     	    ?>
-    		<iframe id="payment-area" src="<?= "https://$payment_shop_domain/infipay-checkout/" . '?mecom-stripe-get-payment-form=1' ?>" scrolling="no" frameBorder="0" style="width: 100%; hight: 100%"></iframe>
+    		<iframe id="payment-area" src="<?= "https://$payment_shop_domain/infipay-checkout/" . '?infipay-stripe-get-payment-form=1' ?>" scrolling="no" frameBorder="0" style="width: 100%; hight: 100%"></iframe>
     		<?php
 		}
 	}

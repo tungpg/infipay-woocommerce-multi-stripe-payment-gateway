@@ -25,8 +25,8 @@ if(infipay_stripe_payment_is_woocommerce_active()){
 		require 'class-infipay-woocommerce-multi-stripe-payment-gateway.php';
 	}
 
-	add_action( 'plugins_loaded', 'infipay_multi_stripe_payment_load_plugin_textdomain' );
-	function infipay_multi_stripe_payment_load_plugin_textdomain() {
+	add_action( 'plugins_loaded', 'infipay_stripe_load_plugin_textdomain' );
+	function infipay_stripe_load_plugin_textdomain() {
 	  load_plugin_textdomain( 'infipay-woocommerce-multi-stripe-payment-gateway', FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
 	}
 
@@ -36,7 +36,7 @@ if(infipay_stripe_payment_is_woocommerce_active()){
 	{
 	    if (is_checkout()) {
 	        $gateways = WC()->payment_gateways->get_available_payment_gateways();
-	        if (isset($gateways['infipay_multi_stripe_payment']->enabled) && $gateways['infipay_multi_stripe_payment']->enabled == 'yes') {
+	        if (isset($gateways['infipay_stripe']->enabled) && $gateways['infipay_stripe']->enabled == 'yes') {
 	            echo '<div id="cs-stripe-loader">
                   <div class="cs-stripe-spinnerWithLockIcon cs-stripe-spinner" aria-busy="true">
                       <p>We\'re processing your payment...<br/>Please <b>DO NOT</b> close this page!</p>

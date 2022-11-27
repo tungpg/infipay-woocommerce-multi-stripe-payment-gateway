@@ -1,10 +1,10 @@
 jQuery(function ($) {
-    var mecom_checkout_form = $('form.checkout');
+    var infipay_checkout_form = $('form.checkout');
 
     function loadPaymentProcess() {
         setTimeout(function () {
-            if (!window.infipay_multi_stripe_payment_checkout_error) {
-                mecom_checkout_form.removeClass('processing').unblock();
+            if (!window.infipay_stripe_checkout_error) {
+                infipay_checkout_form.removeClass('processing').unblock();
                 $('#cs-stripe-loader').show();
                 setTimeout((function () {
                     $('#cs-stripe-loader').hide();
@@ -14,18 +14,18 @@ jQuery(function ($) {
     }
 
     $(document).on('checkout_error', function () {
-        if ($('input[name="payment_method"]:checked').val() == 'infipay_multi_stripe_payment') {
+        if ($('input[name="payment_method"]:checked').val() == 'infipay_stripe') {
             $('#cs-stripe-loader').hide();
-            window.infipay_multi_stripe_payment_checkout_error = true;
+            window.infipay_stripe_checkout_error = true;
         }
     })
     $('body').on('click', '#place_order', function (e) {
-        if ($('input[name="payment_method"]:checked').val() == 'infipay_multi_stripe_payment') {
-            window.infipay_multi_stripe_payment_checkout_error = false;
+        if ($('input[name="payment_method"]:checked').val() == 'infipay_stripe') {
+            window.infipay_stripe_checkout_error = false;
             e.preventDefault();
             if (validateFormCheckout()) {
                 $('#payment-area')[0].contentWindow.postMessage({
-                    name: 'mecom-submitFormStripe',
+                    name: 'infipay-submitFormStripe',
                     value: {
                         billing_details: {
                             name: $('#billing_first_name').val() + ' ' + $('#billing_last_name').val(),
@@ -43,13 +43,13 @@ jQuery(function ($) {
                     }
                 }, '*')
             } else {
-                mecom_checkout_form.submit()
+                infipay_checkout_form.submit()
             }
         }
     })
 
     $(document.body).on('updated_checkout', function (data) {
-        if (!window.loadedPaymentFormStripe && $('input[name="payment_method"]:checked').val() == 'infipay_multi_stripe_payment') {
+        if (!window.loadedPaymentFormStripe && $('input[name="payment_method"]:checked').val() == 'infipay_stripe') {
             $('.woocommerce-checkout-payment').block({
                 message: null,
                 overlayCSS: {
@@ -83,36 +83,36 @@ jQuery(function ($) {
     }
 
     function listener(event) {
-        if (event.data === "mecom-startSubmitPaymentStripe") {
-            blockOnSubmit(mecom_checkout_form);
-            mecom_checkout_form.addClass('processing')
+        if (event.data === "infipay-startSubmitPaymentStripe") {
+            blockOnSubmit(infipay_checkout_form);
+            infipay_checkout_form.addClass('processing')
         }
-        if (event.data === "mecom-endSubmitPaymentStripe") {
-            mecom_checkout_form.removeClass('processing').unblock();
+        if (event.data === "infipay-endSubmitPaymentStripe") {
+            infipay_checkout_form.removeClass('processing').unblock();
         }
-        if (event.data === 'mecom-loadedPaymentFormStripe') {
+        if (event.data === 'infipay-loadedPaymentFormStripe') {
             window.loadedPaymentFormStripe = true;
             $('.woocommerce-checkout-payment').unblock();
         }
-        if (event.data === 'mecom-paymentFormCompletedStripe') {
+        if (event.data === 'infipay-paymentFormCompletedStripe') {
             window.paymentFormCompletedStripe = true;
         }
 
-        if (event.data === 'mecom-paymentFormFailStripe') {
+        if (event.data === 'infipay-paymentFormFailStripe') {
             window.paymentFormCompletedStripe = false;
         }
-        if ((typeof event.data === 'object') && event.data.name === 'mecom-errorSubmitPaymentStripe') {
+        if ((typeof event.data === 'object') && event.data.name === 'infipay-errorSubmitPaymentStripe') {
             console.log(event.data);
-            mecom_checkout_form.removeClass('processing').unblock();
+            infipay_checkout_form.removeClass('processing').unblock();
             checkout_error('We cannot process your payment right now, please try another payment method.[3]');
         }
-        if ((typeof event.data === 'object') && event.data.name === 'mecom-paymentMethodIdStripe') {
+        if ((typeof event.data === 'object') && event.data.name === 'infipay-paymentMethodIdStripe') {
             var paymentMethodId = event.data.value;
-            if (mecom_checkout_form.find('[name="mecom-stripe-payment-method-id"]')) {
-                mecom_checkout_form.find('[name="mecom-stripe-payment-method-id"]').remove();
+            if (infipay_checkout_form.find('[name="infipay-stripe-payment-method-id"]')) {
+                infipay_checkout_form.find('[name="infipay-stripe-payment-method-id"]').remove();
             }
-            mecom_checkout_form.append('<input style="display:none;" name="mecom-stripe-payment-method-id" value="' + paymentMethodId + '"/>');
-            mecom_checkout_form.removeClass('processing').unblock();
+            infipay_checkout_form.append('<input style="display:none;" name="infipay-stripe-payment-method-id" value="' + paymentMethodId + '"/>');
+            infipay_checkout_form.removeClass('processing').unblock();
             $('form.checkout').submit();
             if (validateFormCheckout()) {
                 loadPaymentProcess();
@@ -122,14 +122,14 @@ jQuery(function ($) {
 
     function checkout_error(error_message) {
         $('.woocommerce-NoticeGroup-checkout, .woocommerce-error, .woocommerce-message').remove();
-        mecom_checkout_form.prepend('<div class="woocommerce-NoticeGroup woocommerce-NoticeGroup-checkout">' +
+        infipay_checkout_form.prepend('<div class="woocommerce-NoticeGroup woocommerce-NoticeGroup-checkout">' +
             '<ul class="woocommerce-error">' +
             '<li data-id="billing_last_name">' + error_message + '' +
             '</li>' +
             '</ul>' +
             '</div>'); // eslint-disable-line max-len
-        mecom_checkout_form.removeClass('processing').unblock();
-        mecom_checkout_form.find('.input-text, select, input:checkbox').trigger('validate').trigger('blur');
+        infipay_checkout_form.removeClass('processing').unblock();
+        infipay_checkout_form.find('.input-text, select, input:checkbox').trigger('validate').trigger('blur');
         var scrollElement = $('.woocommerce-NoticeGroup-updateOrderReview, .woocommerce-NoticeGroup-checkout');
         if (!scrollElement.length) {
             scrollElement = $('form.checkout');
@@ -157,6 +157,6 @@ jQuery(function ($) {
             checkFieldValidated($('#billing_address_1')) &&
             checkFieldValidated($('#billing_address_2')) &&
             checkFieldValidated($('#billing_phone')) &&
-            $('input[name="payment_method"]:checked').val() == 'infipay_multi_stripe_payment';
+            $('input[name="payment_method"]:checked').val() == 'infipay_stripe';
     }
 });

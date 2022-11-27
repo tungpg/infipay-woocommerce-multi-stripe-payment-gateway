@@ -52,7 +52,7 @@ jQuery(document).ready(function ($) {
         }
 
         var data = {
-            'action': 'mecom_gateway_stripe_action',
+            'action': 'infipay_gateway_stripe_action',
             'command': 'addNewProxy',
             'rotationMethod': rotationMethod,
             'proxyUrl': newProxyUrl,
@@ -120,7 +120,7 @@ jQuery(document).ready(function ($) {
         }
 
         var data = {
-            'action': 'mecom_gateway_stripe_action',
+            'action': 'infipay_gateway_stripe_action',
             'command': 'saveProxies',
             'rotationMethod': rotationMethod,
             'proxies': proxies
@@ -151,7 +151,7 @@ jQuery(document).ready(function ($) {
             }
             var rotationMethod = $('input[name="rotationMethod"]:checked').val();
             var data = {
-                'action': 'mecom_gateway_stripe_action',
+                'action': 'infipay_gateway_stripe_action',
                 'command': 'activateProxy',
                 'rotationMethod': rotationMethod,
                 'proxyID': selectedIds[0]
@@ -184,7 +184,7 @@ jQuery(document).ready(function ($) {
             }
             var rotationMethod = $('input[name="rotationMethod"]:checked').val();
             var data = {
-                'action': 'mecom_gateway_stripe_action',
+                'action': 'infipay_gateway_stripe_action',
                 'command': 'moveToUnusedProxies',
                 'rotationMethod': rotationMethod,
                 'proxyIds': selectedIds
@@ -213,7 +213,7 @@ jQuery(document).ready(function ($) {
         showConfirm(`Proxy will be rotated by <b>${methodName}</b>.`).then((result) => {
             if (result.value) {
                 var data = {
-                    'action': 'mecom_gateway_stripe_action',
+                    'action': 'infipay_gateway_stripe_action',
                     'command': 'changeRotationMethod',
                     'rotationMethod': rotationMethod
                 };
@@ -255,7 +255,7 @@ jQuery(document).ready(function ($) {
                 return;
             }
             var data = {
-                'action': 'mecom_gateway_stripe_action',
+                'action': 'infipay_gateway_stripe_action',
                 'command': 'deleteProxy',
                 'deleteProxyIds': selectedIds
             };
@@ -283,7 +283,7 @@ jQuery(document).ready(function ($) {
         }
 
         var data = {
-            'action': 'mecom_gateway_stripe_action',
+            'action': 'infipay_gateway_stripe_action',
             'command': 'moveBackProxies',
             'moveBackProxyIds': selectedIds
         };
@@ -317,7 +317,7 @@ jQuery(document).ready(function ($) {
         toggleSyncTrackingLoading(true);
 
         var data = {
-            'action': 'mecom_gateway_stripe_action',
+            'action': 'infipay_gateway_stripe_action',
             'command': 'syncTrackingInfo',
         };
         jQuery.post(ajax_object.ajax_url, data, function (response) {

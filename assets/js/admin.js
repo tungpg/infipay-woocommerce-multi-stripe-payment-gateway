@@ -1,6 +1,6 @@
 (function($) {
     $(document).ready(function() {
-        $('.opt-mecom-stripe-ajax-link').on('click', function(e) {
+        $('.opt-infipay-stripe-ajax-link').on('click', function(e) {
             e.preventDefault();
             var url = $(this).attr('href');
             $.ajax({

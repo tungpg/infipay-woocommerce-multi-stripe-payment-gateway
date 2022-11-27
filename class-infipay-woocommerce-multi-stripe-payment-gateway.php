@@ -7,6 +7,8 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
     // false: stripe currency
     const INFIPAY_STRIPE_FEE_DISPLAY_ORDER_CURRENCY = true;
     
+    const METAKEY_STRIPE_PROXY_URL = '_infipay_stripe_proxy_url';
+    
     const OPT_INFIPAY_STRIPE_VERSION = '1.0.0';
     const METAKEY_CS_STRIPE_FEE      = '_cs_stripe_fee';
     const METAKEY_CS_STRIPE_PAYOUT   = '_cs_stripe_payout';
@@ -274,7 +276,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	        $order->add_order_note(sprintf(__('Stripe Checkout charge complete (Payment Intent ID: %s)', 'infipay'), $paymentIntent->id));
 	        
 	        update_post_meta($order->get_id(), '_transaction_id', $paymentIntent->id);
-	        update_post_meta($order->get_id(), METAKEY_STRIPE_PROXY_URL, $activatedProxy->payment_shop_domain);
+	        update_post_meta($order->get_id(), self::METAKEY_STRIPE_PROXY_URL, $activatedProxy->payment_shop_domain);
 	        $this->updateFeeNetOrderStripe($body->charge, $order);
 	        // Empty cart
 	        $woocommerce->cart->empty_cart();
@@ -285,7 +287,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	        ];
 	    } else {
 	        error_log(print_r($response, true));
-	        update_post_meta($order->get_id(), METAKEY_STRIPE_PROXY_URL, $activatedProxy->payment_shop_domain);
+	        update_post_meta($order->get_id(), self::METAKEY_STRIPE_PROXY_URL, $activatedProxy->payment_shop_domain);
 	        // Empty cart
 	        $order->update_status('failed');
 	        if($body->code === 'domain_whitelist_not_allow') {
@@ -319,45 +321,59 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	}
 	
 	function process_refund( $order_id, $amount = NULL, $reason = '' ) {
-	    // Get order information
-	    $refund_order_tool_url = "https://" . $this->multi_stripe_payment_server_domain . "/index.php?r=multi-stripe-payment/process-refund";
-	    $shop_domain = $_SERVER['HTTP_HOST'];
-	    
-	    $options = array(
-	        'http' => array(
-	            'header'  => "Content-type: application/x-www-form-urlencoded\r\n" . 
-	                           "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36 Edg/103.0.1264.49\r\n",
-	            'method'  => 'POST',
-	            'content' => http_build_query([
-	                'shop_domain' => $shop_domain,
-	                'shop_order_id' => $order_id,
-	                'amount' => $amount,
-	                'reason' => $reason,
-	                'testmode_enabled' => trim($this->testmode_enabled),
-	            ])
-	        )
-	    );
-	    $context  = stream_context_create($options);
-	    $api_response = file_get_contents($refund_order_tool_url, false, $context);
-        	    
-	    $result_object = (object)json_decode( $api_response, true );
-	    
-	    if(isset($result_object->error)){
-	        throw new Exception( __( $result_object->error, 'infipay-woocommerce-multi-stripe-payment-gateway' ) );
-	        return false;
+	    $order = wc_get_order($order_id);
+	    if (0 == $amount || null == $amount) {
+	        return new WP_Error('stripe_refund_error', __('Refund Error: You need to specify a refund amount.', 'infipay-stripe-gateway'));
 	    }
 	    
-	    if(!empty($result_object->success)){
-	        // Take note to order
-	        $order = wc_get_order( $order_id );
-	        
-	        $note = __("multi-stripe-payment-gateway<br/>Refunded: " . wc_price($amount) . " – Reason: $reason");
-	        $order->add_order_note( $note );
-	        
+	    try {
+	        $result = $this->refund_order($order, $order_id, $amount, "", $reason);
+	        $charge = $result['charge_obj'];
+	        $order->add_order_note(sprintf(__('Stripe refund completed; transaction ID = %s', 'infipay-stripe-gateway'), $order->get_transaction_id()));
+	        $this->updateFeeNetOrderStripe($charge, $order);
 	        return true;
+	    } catch (Exception $e) {
+	        return new WP_Error('stripe_refund_error', $e->getMessage());
+	    }
+	}
+	
+	private function refund_order($order, $order_id, $amount, $refundType, $reason)
+	{
+	    // add refund params
+	    $params['transaction_id'] = $order->get_transaction_id();
+	    $params['amount'] = $this->get_stripe_amount($amount, $order->get_currency());
+	    $params['reason'] = $reason;
+	    $params["merchant_site"] = get_home_url();
+	    $params['currency'] = $order->get_currency();
+	    
+	    //Get the proxy url when this order was made
+	    
+	    $proxyUrl = get_post_meta($order_id, self::METAKEY_STRIPE_PROXY_URL, true);
+	    
+	    // do API call
+	    $url = $proxyUrl . "?infipay-stripe-refund=1&order_id=$order_id&" . http_build_query($params);
+	    
+	    $request = wp_remote_get($url);
+	    
+	    $notice = 'There is an error when process this payment, please contact us for more support or you can try to use Stripe!';
+	    if (is_wp_error($request)) {
+	        wc_add_notice($notice, 'error');
+	        $order->add_order_note(sprintf(__('Failed refund by Stripe! Debug proxy %s', 'infipay-stripe-gateway'), $url));
+	        throw new Exception($notice);
 	    }
 	    
-	    return false;
+	    $body = wp_remote_retrieve_body($request);
+	    $result = json_decode($body);
+	    
+	    if (isset($result->refund_obj) && isset($result->refund_obj->status) && $result->refund_obj->status == "succeeded") {
+	        return [
+	            'refund_obj' => $result->refund_obj,
+	            'charge_obj' => $result->charge_obj,
+	        ];
+	    } else {
+	        $order->add_order_note(sprintf(__('Failed refund by Stripe! Debug proxy %s', 'infipay-stripe-gateway'), $url));
+	        throw new Exception($notice);
+	    }
 	}
 	
 	function updateFeeNetOrderStripe($charge, $order)

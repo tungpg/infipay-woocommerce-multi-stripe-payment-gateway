@@ -144,6 +144,8 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 
 	public function process_payment( $order_id ) {
 	    global $woocommerce;
+	    $wp_session = WP_Session::get_instance();
+	    
 	    // we need it to get any order details
 	    $order = wc_get_order($order_id);
 	    

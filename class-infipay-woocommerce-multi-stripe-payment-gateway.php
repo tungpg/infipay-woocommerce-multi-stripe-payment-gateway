@@ -1,4 +1,5 @@
 <?php 
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 

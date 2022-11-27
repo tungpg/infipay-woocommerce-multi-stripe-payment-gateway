@@ -219,7 +219,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	            'payment_intent' => $order->get_transaction_id(),
 	            'payment_method_id' => $_POST['infipay-stripe-payment-method-id'],
 	            'order_id' => $order->get_id(),
-	            'order_invoice' => "ABC-" . $order->get_order_number(),
+	            'order_invoice' => $order->get_order_number(),
 	            'order_items' => $items,
 	            'statement_descriptor' => 'statement_descriptor',
 	            'merchant_site' => get_home_url(),

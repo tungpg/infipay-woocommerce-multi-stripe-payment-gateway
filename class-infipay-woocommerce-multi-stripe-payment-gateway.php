@@ -425,6 +425,16 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		}
 	}
 	
+	public function get_number_of_decimal_digits()
+	{
+	    return $this->is_currency_supports_zero_decimal() ? 0 : 2;
+	}
+	
+	public function is_currency_supports_zero_decimal()
+	{
+	    return in_array(get_woocommerce_currency(), array('HUF', 'JPY', 'TWD'));
+	}
+	
 	/**
 	 * Get real user IP address
 	 * @return String

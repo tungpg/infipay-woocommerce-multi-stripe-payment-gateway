@@ -151,7 +151,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    
 	    $activatedProxy = $wp_session['active_stripe_account'];
 	    
-	    if (!isset($activatedProxy)) {
+	    if (!isset($activatedProxy) || empty($activatedProxy->payment_shop_domain)) {
 	        error_log("Can't find activated proxy!\n");
 	        wc_add_notice('We cannot accept any payments right now. Please comeback to try tomorrow or select other payment methods if available.', 'error');
 	        return [
@@ -207,7 +207,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	            "total" => $amount
 	        ];
 	    }
-	    $response = wp_remote_post($activatedProxy->payment_shop_domain . '/infipay-checkout/?mecom-stripe-make-payment=1', [
+	    $response = wp_remote_post("https://" . $activatedProxy->payment_shop_domain . '/infipay-checkout/?mecom-stripe-make-payment=1', [
 	        'timeout' => 5 * 60,
 	        'headers' => [
 	            'Content-Type' => 'application/json',

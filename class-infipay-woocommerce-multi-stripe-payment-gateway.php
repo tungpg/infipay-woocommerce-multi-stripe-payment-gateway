@@ -250,6 +250,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    }
 	    $body = wp_remote_retrieve_body($response);
 	    $body = json_decode($body);
+	    print_r($body);
 	    if ($body->status === 'success') {
 	        $paymentIntent = $body->payment_intent;
 	        $order->payment_complete();

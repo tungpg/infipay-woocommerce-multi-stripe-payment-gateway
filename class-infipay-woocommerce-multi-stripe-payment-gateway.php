@@ -195,8 +195,8 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    $order_items = $order->get_items();
 	    foreach ($order_items as $it) {
 	        $product = wc_get_product($it->get_product_id());
-	        //$product_name = $product->get_name(); // Get the product name
-	        $product_name = $this->getProductTitle($product->get_name());
+	        $product_name = $product->get_name(); // Get the product name
+	        //$product_name = $this->getProductTitle($product->get_name());
 	        
 	        $item_quantity = $it->get_quantity(); // Get the item quantity
 	        
@@ -217,9 +217,9 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	            'payment_intent' => $order->get_transaction_id(),
 	            'payment_method_id' => 'infipay_multi_stripe_payment',
 	            'order_id' => $order->get_id(),
-	            'order_invoice' => $this->invoice_prefix . $order->get_order_number(),
+	            'order_invoice' => "ABC-" . $order->get_order_number(),
 	            'order_items' => $items,
-	            'statement_descriptor' => $this->get_option('statement_descriptor'),
+	            'statement_descriptor' => 'statement_descriptor',
 	            'merchant_site' => get_home_url(),
 	            'user_agent' => $_SERVER['HTTP_USER_AGENT'],
 	            'amount' => $order->get_total(),

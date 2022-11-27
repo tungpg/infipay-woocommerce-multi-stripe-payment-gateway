@@ -30,6 +30,8 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		$this->supports[] ='refunds';
         		
 		add_action('woocommerce_update_options_payment_gateways_'.$this->id, array($this, 'process_admin_options'));
+		
+		add_action('wp_enqueue_scripts', array($this, 'payment_scripts'));
 	}
 
 	public function init_form_fields(){

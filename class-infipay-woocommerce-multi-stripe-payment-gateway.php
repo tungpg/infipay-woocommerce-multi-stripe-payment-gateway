@@ -408,10 +408,10 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    if ('no' === $this->enabled) {
 	        return;
 	    }
-	    wp_register_style('infipay_stripe_styles', plugins_url('assets/css/styles.css', __FILE__), [], OPT_INFIPAY_STRIPE_VERSION);
+	    wp_register_style('infipay_stripe_styles', plugins_url('assets/css/styles.css', __FILE__), [], self::OPT_INFIPAY_STRIPE_VERSION);
 	    wp_enqueue_style('infipay_stripe_styles');
 	    
-	    wp_register_script('infipay_stripe_js', plugins_url('assets/js/checkout_hook.js', __FILE__), array('jquery'), OPT_INFIPAY_STRIPE_VERSION, true);
+	    wp_register_script('infipay_stripe_js', plugins_url('assets/js/checkout_hook.js', __FILE__), array('jquery'), self::OPT_INFIPAY_STRIPE_VERSION, true);
 	    wp_enqueue_script('infipay_stripe_js');
 	}
 	

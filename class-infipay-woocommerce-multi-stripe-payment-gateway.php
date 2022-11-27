@@ -351,7 +351,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    $proxyUrl = get_post_meta($order_id, self::METAKEY_STRIPE_PROXY_URL, true);
 	    
 	    // do API call
-	    $url = $proxyUrl . "?infipay-stripe-refund=1&order_id=$order_id&" . http_build_query($params);
+	    $url = "https://infipay-checkout/" . $proxyUrl . "?infipay-stripe-refund=1&order_id=$order_id&" . http_build_query($params);
 	    
 	    $request = wp_remote_get($url);
 	    

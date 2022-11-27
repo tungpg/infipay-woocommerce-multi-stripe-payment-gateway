@@ -3,7 +3,6 @@
 class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 
     private $order_status;
-    public $active_stripe_account;
 
 	public function __construct(){
 		$this->id = 'infipay_multi_stripe_payment';
@@ -22,7 +21,6 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		$this->order_status = $this->get_option('order_status');
 		$this->order_button_text = $this->get_option('order_button_text');
 		$this->allow_countries = strtoupper($this->get_option('allow_countries'));
-		$this->active_stripe_account = null;
 		
 		// Payment icon show at checkout
 		$this->icon = plugin_dir_url( __FILE__ ) . 'assets/images/cards.png';
@@ -149,7 +147,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    // we need it to get any order details
 	    $order = wc_get_order($order_id);
 	    
-	    $activatedProxy = $this->active_stripe_account;
+	    $activatedProxy = $wp_session['active_stripe_account'];
 	    
 	    if (!isset($activatedProxy)) {
 	        error_log("Can't find activated proxy!\n");
@@ -369,6 +367,8 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	
 	public function payment_fields(){
 	    global $woocommerce;
+	    $wp_session = WP_Session::get_instance();
+	    $wp_session['active_stripe_account'] = null;
 	    
 	    $cart_total = $woocommerce->cart->total;
 	    $shop_domain = $_SERVER['HTTP_HOST'];
@@ -405,8 +405,8 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		    
 		    echo "<div style='color:red'>$error_message</div>";
 		}else{
-		    $this->active_stripe_account = $result_object;
-		    print_r($this->active_stripe_account);
+		    $wp_session['active_stripe_account'] = $result_object;
+		    
 		    // Get the information value
     		$payment_shop_domain = $result_object->payment_shop_domain;
     		

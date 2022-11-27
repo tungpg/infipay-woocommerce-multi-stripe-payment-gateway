@@ -275,7 +275,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	        
 	        update_post_meta($order->get_id(), '_transaction_id', $paymentIntent->id);
 	        update_post_meta($order->get_id(), METAKEY_STRIPE_PROXY_URL, $activatedProxy->payment_shop_domain);
-	        updateFeeNetOrderStripe($body->charge, $order);
+	        $this->updateFeeNetOrderStripe($body->charge, $order);
 	        // Empty cart
 	        $woocommerce->cart->empty_cart();
 	        

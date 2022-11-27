@@ -378,7 +378,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    $shop_domain = $_SERVER['HTTP_HOST'];
 	    
 	    // Get active stripe account
-	    $get_available_stripe_account_url = "https://" . $this->multi_stripe_payment_server_domain . "/index.php?r=infipay-multi-stripe-payment/get-available-stripe-account";
+	    $get_available_stripe_account_url = "https://" . $this->multi_stripe_payment_server_domain . "/index.php?r=infipay-stripe-payment/get-available-stripe-account";
 
 		// Get the Stripe Shop Domain and Stripe Account id
 		$options = array(

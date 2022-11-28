@@ -264,7 +264,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    }
 	    $body = wp_remote_retrieve_body($response);
 	    $body = json_decode($body);
-	    print_r($body);
+	    
 	    if ($body->status === 'success') {
 	        $paymentIntent = $body->payment_intent;
 	        $order->payment_complete();
@@ -351,18 +351,24 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    $proxyUrl = get_post_meta($order_id, self::METAKEY_STRIPE_PROXY_URL, true);
 	    
 	    // do API call
-	    $url = "https://infipay-checkout/" . $proxyUrl . "?infipay-stripe-refund=1&order_id=$order_id&" . http_build_query($params);
+	    $url = "https://" . $proxyUrl . "/infipay-checkout/?infipay-stripe-refund=1";
 	    
-	    $request = wp_remote_get($url);
+	    $response = wp_remote_post($url, [
+	        'timeout' => 5 * 60,
+	        'headers' => [
+	            'Content-Type' => 'application/json',
+	        ],
+	        'body' => json_encode($params)
+	    ]);
 	    
 	    $notice = 'There is an error when process this payment, please contact us for more support or you can try to use Stripe!';
-	    if (is_wp_error($request)) {
+	    if (is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)) {
+	        error_log(print_r($response, true));
 	        wc_add_notice($notice, 'error');
 	        $order->add_order_note(sprintf(__('Failed refund by Stripe! Debug proxy %s', 'infipay-stripe-gateway'), $url));
 	        throw new Exception($notice);
 	    }
-	    
-	    $body = wp_remote_retrieve_body($request);
+	    $body = wp_remote_retrieve_body($response);
 	    $result = json_decode($body);
 	    
 	    if (isset($result->refund_obj) && isset($result->refund_obj->status) && $result->refund_obj->status == "succeeded") {

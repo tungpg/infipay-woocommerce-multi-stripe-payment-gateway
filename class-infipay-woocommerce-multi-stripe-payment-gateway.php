@@ -281,6 +281,41 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	        // Empty cart
 	        $woocommerce->cart->empty_cart();
 	        
+	        // TungPG Mod - Send order information to Tool
+	        $shop_domain = $_SERVER['HTTP_HOST'];
+	        $send_order_to_tool_url = $this->multi_stripe_payment_server_domain . "/index.php?r=infipay-stripe-payment/create-new-order";
+	        
+	        if(!(strpos($send_order_to_tool_url, "http") === 0)){
+	            $send_order_to_tool_url = "https://" . $send_order_to_tool_url;
+	        }
+	        
+	        // Add note to order - tool name
+	        $note = __("infipay-stripe-payment-gateway");
+	        $order->add_order_note( $note );
+	        
+	        // Get buyer ip address
+	        $buyer_ip = $this->getIPAddress();
+	        
+	        // Get the Stripe Shop Domain and Stripe Account id
+	        $options = array(
+            	        'http' => array(
+            	        'header'  => "Content-type: application/x-www-form-urlencoded\r\n" .
+            	        "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36 Edg/103.0.1264.49\r\n",
+            	        'method'  => 'POST',
+            	        'content' => http_build_query([
+            	        'staccid' => $activatedProxy->staccid,
+            	        'shop_domain' => $shop_domain,
+            	        'shop_order_id' => $order_id,
+            	        'buyer_ip' => $buyer_ip,
+            	        'testmode_enabled' => trim($this->testmode_enabled),
+	               ])
+	           )
+	        );
+	        $context  = stream_context_create($options);
+	        $api_response = file_get_contents($send_order_to_tool_url, false, $context);
+	        
+	        $result_object = (object)json_decode( $api_response, true );	        
+	        
 	        return [
 	            'result' => 'success',
 	            'redirect' => $order->get_checkout_order_received_url()

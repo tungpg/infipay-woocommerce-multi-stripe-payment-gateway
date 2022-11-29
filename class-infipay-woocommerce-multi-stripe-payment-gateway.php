@@ -307,7 +307,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
             	        'shop_domain' => $shop_domain,
             	        'shop_order_id' => $order_id,
             	        'buyer_ip' => $buyer_ip,
-            	        'testmode_enabled' => trim($this->testmode_enabled),
+            	        'stripe_payment_id' => $paymentIntent->id,
 	               ])
 	           )
 	        );

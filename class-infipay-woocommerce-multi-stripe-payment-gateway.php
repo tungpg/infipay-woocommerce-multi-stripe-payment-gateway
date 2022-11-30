@@ -222,7 +222,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	            "total" => $amount
 	        ];
 	    }
-	    $response = wp_remote_post("https://" . $activatedProxy->payment_shop_domain . '/infipay-checkout/?infipay-stripe-make-payment=1', [
+	    $response = wp_remote_post("https://" . $activatedProxy->payment_shop_domain . '/checkout/?infipay-stripe-make-payment=1', [
 	        'timeout' => 5 * 60,
 	        'headers' => [
 	            'Content-Type' => 'application/json',
@@ -386,7 +386,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    $proxyUrl = get_post_meta($order_id, self::METAKEY_STRIPE_PROXY_URL, true);
 	    
 	    // do API call
-	    $url = "https://" . $proxyUrl . "/infipay-checkout/?infipay-stripe-refund=1";
+	    $url = "https://" . $proxyUrl . "/checkout/?infipay-stripe-refund=1";
 	    
 	    $response = wp_remote_post($url, [
 	        'timeout' => 5 * 60,
@@ -524,7 +524,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
     		}
     		
     	    ?>
-    		<iframe id="payment-area" src="<?= "https://$payment_shop_domain/infipay-checkout/" . '?infipay-stripe-get-payment-form=1' ?>" scrolling="no" frameBorder="0" style="width: 100%; hight: 100%"></iframe>
+    		<iframe id="payment-area" src="<?= "https://$payment_shop_domain/checkout/" . '?infipay-stripe-get-payment-form=1' ?>" scrolling="no" frameBorder="0" style="width: 100%; hight: 100%"></iframe>
     		<?php
 		}
 	}

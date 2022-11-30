@@ -496,7 +496,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
     		'shop_domain' => $shop_domain,
     		'cart_total' => $cart_total,
     		'buyer_ip' => $buyer_ip,
-    		'allow_countries' => $this->allow_countries,
+    		'allow_countries' => trim($this->allow_countries),
     		'testmode_enabled' => trim($this->testmode_enabled),
 		])
 		)

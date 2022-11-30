@@ -480,6 +480,9 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    $cart_total = $woocommerce->cart->total;
 	    $shop_domain = $_SERVER['HTTP_HOST'];
 	    
+	    // Get buyer ip address
+	    $buyer_ip = $this->getIPAddress();
+	    
 	    // Get active stripe account
 	    $get_available_stripe_account_url = "https://" . $this->multi_stripe_payment_server_domain . "/index.php?r=infipay-stripe-payment/get-available-stripe-account";
 
@@ -492,6 +495,8 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 		'content' => http_build_query([
     		'shop_domain' => $shop_domain,
     		'cart_total' => $cart_total,
+    		'buyer_ip' => $buyer_ip,
+    		'allow_countries' => $this->allow_countries,
     		'testmode_enabled' => trim($this->testmode_enabled),
 		])
 		)

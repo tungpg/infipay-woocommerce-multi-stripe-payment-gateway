@@ -283,7 +283,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	        
 	        // TungPG Mod - Send order information to Tool
 	        $shop_domain = $_SERVER['HTTP_HOST'];
-	        $send_order_to_tool_url = $this->multi_stripe_payment_server_domain . "/index.php?r=infipay-stripe-payment/create-new-order";
+	        $send_order_to_tool_url = $this->multi_stripe_payment_server_domain . "/index.php?r=multi-stripe-embed-payment/create-new-order";
 	        
 	        if(!(strpos($send_order_to_tool_url, "http") === 0)){
 	            $send_order_to_tool_url = "https://" . $send_order_to_tool_url;
@@ -484,7 +484,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    $buyer_ip = $this->getIPAddress();
 	    
 	    // Get active stripe account
-	    $get_available_stripe_account_url = "https://" . $this->multi_stripe_payment_server_domain . "/index.php?r=infipay-stripe-payment/get-available-stripe-account";
+	    $get_available_stripe_account_url = "https://" . $this->multi_stripe_payment_server_domain . "/index.php?r=multi-stripe-embed-payment/get-available-stripe-account";
 
 		// Get the Stripe Shop Domain and Stripe Account id
 		$options = array(

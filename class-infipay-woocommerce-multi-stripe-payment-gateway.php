@@ -48,7 +48,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 
 	public function init_form_fields(){
 	       
-    	    $default_server_domain = "payment.infipay.us";
+    	    $default_server_domain = "payments.infipay.us";
 	        
 			$this->form_fields = array(
 			    

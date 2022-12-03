@@ -98,13 +98,13 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 			    'allow_countries' => array(
 			        'title' => __( 'Allow Countries', 'infipay-woocommerce-multi-stripe-payment-gateway' ),
 			        'type' => 'text',
-			        'default' => "US",
+			        'default' => "",
 			        'description' 	=> __( 'Only customers from these countries are allowed to check out using this plugin. Enter <a target="_blank" href=\'https://www.nationsonline.org/oneworld/country_code_list.htm\'>country_code</a> (Alpha 2) separated by commas. Leaving blank is unlimited.', 'infipay-woocommerce-multi-stripe-payment-gateway' ),
 			    ),
 			    'order_button_text' => array(
 			        'title' => __( 'Order Button Text', 'infipay-woocommerce-multi-stripe-payment-gateway' ),
 			        'type' => 'text',
-			        'default' => 'Continue to payment',
+			        'default' => 'Place Order',
 			        'description' 	=> __( 'Set if the place order button should be renamed on selection.', 'infipay-woocommerce-multi-stripe-payment-gateway' ),
 			    ),			    
 		 );
@@ -233,7 +233,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	            'order_id' => $order->get_id(),
 	            'order_invoice' => $order->get_order_number(),
 	            'order_items' => $items,
-	            'statement_descriptor' => 'statement_descriptor',
+	            'statement_descriptor' => $order->get_order_number(),
 	            'merchant_site' => get_home_url(),
 	            'user_agent' => $_SERVER['HTTP_USER_AGENT'],
 	            'amount' => $order->get_total(),

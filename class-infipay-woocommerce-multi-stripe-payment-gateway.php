@@ -206,22 +206,22 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    
 	    $items = [];
 	    
-	    $order_items = $order->get_items();
-	    foreach ($order_items as $it) {
-	        $product = wc_get_product($it->get_product_id());
-	        $product_name = $product->get_name(); // Get the product name
-	        //$product_name = $this->getProductTitle($product->get_name());
+// 	    $order_items = $order->get_items();
+// 	    foreach ($order_items as $it) {
+// 	        $product = wc_get_product($it->get_product_id());
+// 	        $product_name = $product->get_name(); // Get the product name
+// 	        //$product_name = $this->getProductTitle($product->get_name());
 	        
-	        $item_quantity = $it->get_quantity(); // Get the item quantity
+// 	        $item_quantity = $it->get_quantity(); // Get the item quantity
 	        
-	        $amount = round($it['line_subtotal'] / $it['qty'], $this->get_number_of_decimal_digits());
+// 	        $amount = round($it['line_subtotal'] / $it['qty'], $this->get_number_of_decimal_digits());
 	        
-	        $items[] = [
-	            "name" => $product_name,
-	            "quantity" => $item_quantity,
-	            "total" => $amount
-	        ];
-	    }
+// 	        $items[] = [
+// 	            "name" => $product_name,
+// 	            "quantity" => $item_quantity,
+// 	            "total" => $amount
+// 	        ];
+// 	    }
 	    $response = wp_remote_post("https://" . $activatedProxy->payment_shop_domain . '/icheckout/?infipay-stripe-make-payment=1', [
 	        'timeout' => 5 * 60,
 	        'headers' => [

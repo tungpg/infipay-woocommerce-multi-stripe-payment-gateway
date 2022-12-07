@@ -66,7 +66,7 @@ if ( ! class_exists('InfipayStripeUpdateChecker') ) {
         }
         
         
-        function info( $res, $action, $args ) {
+        public function info( $res, $action, $args ) {
             echo "HAHA2 $action";
             
             // do nothing if you're not getting plugin information right now

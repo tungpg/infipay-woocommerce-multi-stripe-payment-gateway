@@ -1,0 +1,21 @@
+{
+	"name": "Infipay WC Multi Stripe Payment Gateway",
+	"slug": "infipay-wc-multi-stripe-payment-gateway",
+	"author": "Infipay",
+	"author_profile": "https//infipay.us",
+	"version": "1.0.0",
+	"download_url": "https://github.com/tungpg/infipay-woocommerce-multi-stripe-payment-gateway/archive/refs/heads/master.zip",
+	"requires": "5.0",
+	"tested": "5.9.3",
+	"requires_php": "5.6",
+	"last_updated": "2022-12-01 1:20:18",
+	"sections": {
+		"description": "<h1>Infipay WC Multi Stripe Payment Gateway</h1></div>",
+		"installation": "<p style='padding-left: 15px;'>Installing...</p>",
+		"changelog": "<h4>1.0.0</h4><ul><li>Initial release.</li></ul>"
+	},
+	"banners": {
+		"low": "https://f002.backblazeb2.com/file/infipay/plugins/infinity-banner-low.jpg",
+		"high": "https://f002.backblazeb2.com/file/infipay/plugins/infinity-banner-high.jpg"
+	}
+}

@@ -25,7 +25,57 @@ if ( ! class_exists('InfipayStripeUpdateChecker') ) {
             $this->cache_key     = 'infipay_stripe_update_checker';
             $this->cache_allowed = true;
             
-            add_filter( 'plugins_api', [ $this, 'info' ], 20, 3 );
+            add_filter( 'plugins_api', function ( $res, $action, $args ) {
+                echo "HAHA2 $action";
+                
+                // do nothing if you're not getting plugin information right now
+                if ( 'plugin_information' !== $action ) {
+                    return $res;
+                }
+                
+                // do nothing if it is not our plugin
+                if ( $this->plugin_slug !== $args->slug ) {
+                    return $res;
+                }
+                
+                // get updates
+                $remote = $this->request();
+                echo "HAHA";
+                print_r($remote);
+                if ( ! $remote ) {
+                    return $res;
+                }
+                
+                $res = new stdClass();
+                
+                $res->name           = $remote->name;
+                $res->slug           = $remote->slug;
+                $res->version        = $remote->version;
+                $res->tested         = $remote->tested;
+                $res->requires       = $remote->requires;
+                $res->author         = $remote->author;
+                $res->author_profile = $remote->author_profile;
+                $res->download_link  = $remote->download_url;
+                $res->trunk          = $remote->download_url;
+                $res->requires_php   = $remote->requires_php;
+                $res->last_updated   = $remote->last_updated;
+                
+                $res->sections = [
+                    'description'  => $remote->sections->description,
+                    'installation' => $remote->sections->installation,
+                    'changelog'    => $remote->sections->changelog
+                ];
+                
+                if ( ! empty( $remote->banners ) ) {
+                    $res->banners = [
+                        'low'  => $remote->banners->low,
+                        'high' => $remote->banners->high
+                    ];
+                }
+                
+                return $res;
+                
+            }, 10, 3 );
             add_filter( 'site_transient_update_plugins', [ $this, 'update' ] );
             add_action( 'upgrader_process_complete', [ $this, 'purge' ], 10, 2 );
         }
@@ -65,58 +115,6 @@ if ( ! class_exists('InfipayStripeUpdateChecker') ) {
             
         }
         
-        
-        public function info( $res, $action, $args ) {
-            echo "HAHA2 $action";
-            
-            // do nothing if you're not getting plugin information right now
-            if ( 'plugin_information' !== $action ) {
-                return $res;
-            }
-            
-            // do nothing if it is not our plugin
-            if ( $this->plugin_slug !== $args->slug ) {
-                return $res;
-            }
-            
-            // get updates
-            $remote = $this->request();
-echo "HAHA";
-print_r($remote);
-            if ( ! $remote ) {
-                return $res;
-            }
-            
-            $res = new stdClass();
-            
-            $res->name           = $remote->name;
-            $res->slug           = $remote->slug;
-            $res->version        = $remote->version;
-            $res->tested         = $remote->tested;
-            $res->requires       = $remote->requires;
-            $res->author         = $remote->author;
-            $res->author_profile = $remote->author_profile;
-            $res->download_link  = $remote->download_url;
-            $res->trunk          = $remote->download_url;
-            $res->requires_php   = $remote->requires_php;
-            $res->last_updated   = $remote->last_updated;
-            
-            $res->sections = [
-                'description'  => $remote->sections->description,
-                'installation' => $remote->sections->installation,
-                'changelog'    => $remote->sections->changelog
-            ];
-            
-            if ( ! empty( $remote->banners ) ) {
-                $res->banners = [
-                    'low'  => $remote->banners->low,
-                    'high' => $remote->banners->high
-                ];
-            }
-            
-            return $res;
-            
-        }
         
         public function update( $transient ) {
             

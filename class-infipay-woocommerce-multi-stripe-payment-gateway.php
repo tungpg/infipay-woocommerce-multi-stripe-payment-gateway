@@ -20,11 +20,11 @@ if ( ! class_exists('InfipayStripeUpdateChecker') ) {
         public $cache_allowed;
         
         public function __construct() {
-            $this->plugin_slug   = plugin_basename( __DIR__ );
+            $this->plugin_slug   = "infipay-wc-multi-stripe-payment-gateway";
             $this->version       = OPT_INFIPAY_STRIPE_VERSION;
             $this->cache_key     = 'infipay_stripe_update_checker';
             $this->cache_allowed = true;
-print_r($this);            
+            
             add_filter( 'plugins_api', [ $this, 'info' ], 10, 3 );
             add_filter( 'site_transient_update_plugins', [ $this, 'update' ] );
             add_action( 'upgrader_process_complete', [ $this, 'purge' ], 10, 2 );

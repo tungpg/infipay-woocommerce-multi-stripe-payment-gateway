@@ -28,7 +28,7 @@ if ( ! class_exists('InfipayStripeUpdateChecker') ) {
             add_filter( 'plugins_api', [ $this, 'info' ], 20, 3 );
             add_filter( 'site_transient_update_plugins', [ $this, 'update' ] );
             add_action( 'upgrader_process_complete', [ $this, 'purge' ], 10, 2 );
-            
+            echo "HAHA1";
         }
         
         public function isPluginPage() {

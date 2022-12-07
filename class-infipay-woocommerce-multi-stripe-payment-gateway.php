@@ -433,7 +433,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	        $order->add_order_note(sprintf(__('Stripe Checkout charge complete (Payment Intent ID: %s)', 'infipay'), $paymentIntent->id));
 	        
 	        update_post_meta($order->get_id(), '_transaction_id', $paymentIntent->id);
-	        update_post_meta($order->get_id(), self::METAKEY_STRIPE_PROXY_URL, $activatedProxy->payment_shop_domain);
+	        update_post_meta($order->get_id(), METAKEY_STRIPE_PROXY_URL, $activatedProxy->payment_shop_domain);
 	        $this->updateFeeNetOrderStripe($body->charge, $order);
 	        // Empty cart
 	        $woocommerce->cart->empty_cart();
@@ -479,7 +479,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	        ];
 	    } else {
 	        error_log(print_r($response, true));
-	        update_post_meta($order->get_id(), self::METAKEY_STRIPE_PROXY_URL, $activatedProxy->payment_shop_domain);
+	        update_post_meta($order->get_id(), METAKEY_STRIPE_PROXY_URL, $activatedProxy->payment_shop_domain);
 	        // Empty cart
 	        $order->update_status('failed');
 	        if($body->code === 'domain_whitelist_not_allow') {
@@ -540,7 +540,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    
 	    //Get the proxy url when this order was made
 	    
-	    $proxyUrl = get_post_meta($order_id, self::METAKEY_STRIPE_PROXY_URL, true);
+	    $proxyUrl = get_post_meta($order_id, METAKEY_STRIPE_PROXY_URL, true);
 	    
 	    // do API call
 	    $url = "https://" . $proxyUrl . "/icheckout/?infipay-stripe-refund=1";
@@ -577,7 +577,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	function updateFeeNetOrderStripe($charge, $order)
 	{
 	    if (isset($charge->balance_transaction) && is_object($charge->balance_transaction)) {
-	        $display_order_currency = self::INFIPAY_STRIPE_FEE_DISPLAY_ORDER_CURRENCY;
+	        $display_order_currency = INFIPAY_STRIPE_FEE_DISPLAY_ORDER_CURRENCY;
 	        $balance_transaction = $charge->balance_transaction;
 	        $exchange_rate = $balance_transaction->exchange_rate === null ? 1 : $balance_transaction->exchange_rate;
 	        $amount_refunded = $display_order_currency ? $charge->amount_refunded : $charge->amount_refunded * $exchange_rate;
@@ -602,9 +602,9 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	        }
 	        $payment_balance['fee'] = wc_format_decimal($payment_balance['fee'] / 100, 4);
 	        $payment_balance['net'] = wc_format_decimal($payment_balance['net'] / 100, 4);
-	        update_post_meta($order->get_id(), self::METAKEY_INFIPAY_STRIPE_FEE, $payment_balance['fee']);
-	        update_post_meta($order->get_id(), self::METAKEY_INFIPAY_STRIPE_PAYOUT, $payment_balance['net']);
-	        update_post_meta($order->get_id(), self::METAKEY_INFIPAY_STRIPE_CURRENCY, $payment_balance['currency']);
+	        update_post_meta($order->get_id(), METAKEY_INFIPAY_STRIPE_FEE, $payment_balance['fee']);
+	        update_post_meta($order->get_id(), METAKEY_INFIPAY_STRIPE_PAYOUT, $payment_balance['net']);
+	        update_post_meta($order->get_id(), METAKEY_INFIPAY_STRIPE_CURRENCY, $payment_balance['currency']);
 	    }
 	}
 	
@@ -622,10 +622,10 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    if ('no' === $this->enabled) {
 	        return;
 	    }
-	    wp_register_style('infipay_stripe_styles', plugins_url('assets/css/styles.css', __FILE__), [], self::OPT_INFIPAY_STRIPE_VERSION);
+	    wp_register_style('infipay_stripe_styles', plugins_url('assets/css/styles.css', __FILE__), [], OPT_INFIPAY_STRIPE_VERSION);
 	    wp_enqueue_style('infipay_stripe_styles');
 	    
-	    wp_register_script('infipay_stripe_js', plugins_url('assets/js/checkout_hook.js', __FILE__), array('jquery'), self::OPT_INFIPAY_STRIPE_VERSION, true);
+	    wp_register_script('infipay_stripe_js', plugins_url('assets/js/checkout_hook.js', __FILE__), array('jquery'), OPT_INFIPAY_STRIPE_VERSION, true);
 	    wp_enqueue_script('infipay_stripe_js');
 	}
 	

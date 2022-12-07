@@ -81,7 +81,8 @@ if ( ! class_exists('InfipayStripeUpdateChecker') ) {
             
             // get updates
             $remote = $this->request();
-            
+echo "HAHA";
+print_r($remote);
             if ( ! $remote ) {
                 return $res;
             }

@@ -1,6 +1,15 @@
 <?php 
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
+const INFIPAY_STRIPE_FEE_DISPLAY_ORDER_CURRENCY = true;
+
+const METAKEY_STRIPE_PROXY_URL = '_infipay_stripe_proxy_url';
+
+const OPT_INFIPAY_STRIPE_VERSION = '0.1.1';
+const METAKEY_INFIPAY_STRIPE_FEE      = '_infipay_stripe_fee';
+const METAKEY_INFIPAY_STRIPE_PAYOUT   = '_infipay_stripe_payout';
+const METAKEY_INFIPAY_STRIPE_CURRENCY = '_infipay_stripe_currency';
+
 if ( ! class_exists('InfipayStripeUpdateChecker') ) {
     
     class InfipayStripeUpdateChecker {
@@ -12,7 +21,7 @@ if ( ! class_exists('InfipayStripeUpdateChecker') ) {
         
         public function __construct() {
             $this->plugin_slug   = plugin_basename( __DIR__ );
-            $this->version       = OPT_MECOM_STRIPE_VERSION;
+            $this->version       = OPT_INFIPAY_STRIPE_VERSION;
             $this->cache_key     = 'infipay_stripe_update_checker';
             $this->cache_allowed = true;
             
@@ -153,7 +162,7 @@ if ( ! class_exists('InfipayStripeUpdateChecker') ) {
         
     }
     
-    new CSStripeUpdateChecker();
+    new InfipayStripeUpdateChecker();
     
 }
 
@@ -161,14 +170,6 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
     
     // true: order currency
     // false: stripe currency
-    const INFIPAY_STRIPE_FEE_DISPLAY_ORDER_CURRENCY = true;
-    
-    const METAKEY_STRIPE_PROXY_URL = '_infipay_stripe_proxy_url';
-    
-    const OPT_INFIPAY_STRIPE_VERSION = '1.0.0';
-    const METAKEY_INFIPAY_STRIPE_FEE      = '_infipay_stripe_fee';
-    const METAKEY_INFIPAY_STRIPE_PAYOUT   = '_infipay_stripe_payout';
-    const METAKEY_INFIPAY_STRIPE_CURRENCY = '_infipay_stripe_currency';
 
     private $order_status;
     

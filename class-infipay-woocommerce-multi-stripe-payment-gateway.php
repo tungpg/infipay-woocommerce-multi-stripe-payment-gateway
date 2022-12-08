@@ -3,7 +3,7 @@
 
 const INFIPAY_STRIPE_FEE_DISPLAY_ORDER_CURRENCY = true;
 
-const METAKEY_STRIPE_PROXY_URL = '_infipay_stripe_proxy_url';
+const METAKEY_INFIPAY_STRIPE_PROXY_URL = '_infipay_stripe_proxy_url';
 
 const OPT_INFIPAY_STRIPE_VERSION = '0.1.1';
 const METAKEY_INFIPAY_STRIPE_FEE      = '_infipay_stripe_fee';
@@ -433,7 +433,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	        $order->add_order_note(sprintf(__('Stripe Checkout charge complete (Payment Intent ID: %s)', 'infipay'), $paymentIntent->id));
 	        
 	        update_post_meta($order->get_id(), '_transaction_id', $paymentIntent->id);
-	        update_post_meta($order->get_id(), METAKEY_STRIPE_PROXY_URL, $activatedProxy->payment_shop_domain);
+	        update_post_meta($order->get_id(), METAKEY_INFIPAY_STRIPE_PROXY_URL, $activatedProxy->payment_shop_domain);
 	        $this->updateFeeNetOrderStripe($body->charge, $order);
 	        // Empty cart
 	        $woocommerce->cart->empty_cart();
@@ -479,7 +479,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	        ];
 	    } else {
 	        error_log(print_r($response, true));
-	        update_post_meta($order->get_id(), METAKEY_STRIPE_PROXY_URL, $activatedProxy->payment_shop_domain);
+	        update_post_meta($order->get_id(), METAKEY_INFIPAY_STRIPE_PROXY_URL, $activatedProxy->payment_shop_domain);
 	        // Empty cart
 	        $order->update_status('failed');
 	        if($body->code === 'domain_whitelist_not_allow') {
@@ -540,7 +540,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	    
 	    //Get the proxy url when this order was made
 	    
-	    $proxyUrl = get_post_meta($order_id, METAKEY_STRIPE_PROXY_URL, true);
+	    $proxyUrl = get_post_meta($order_id, METAKEY_INFIPAY_STRIPE_PROXY_URL, true);
 	    
 	    // do API call
 	    $url = "https://" . $proxyUrl . "/icheckout/?infipay-stripe-refund=1";

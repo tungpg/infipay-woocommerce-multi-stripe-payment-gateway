@@ -10,7 +10,7 @@ const METAKEY_INFIPAY_STRIPE_FEE      = '_infipay_stripe_fee';
 const METAKEY_INFIPAY_STRIPE_PAYOUT   = '_infipay_stripe_payout';
 const METAKEY_INFIPAY_STRIPE_CURRENCY = '_infipay_stripe_currency';
 
-class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
+class Infipay_WooCommerce_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
     
     // true: order currency
     // false: stripe currency
@@ -20,7 +20,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 
 	public function __construct(){
 		$this->id = 'infipay_stripe';
-		$this->method_title = __('Infipay Multi Stripe Payment','infipay-woocommerce-multi-stripe-payment-gateway');
+		$this->method_title = __('Infipay WooCommerce Multi Stripe Payment','infipay-woocommerce-multi-stripe-payment-gateway');
 		//$this->title = __('Infipay Multi Stripe Payment','infipay-woocommerce-multi-stripe-payment-gateway');
 		$this->has_fields = true;
 		$this->init_form_fields();

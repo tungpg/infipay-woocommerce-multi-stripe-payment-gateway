@@ -5,7 +5,7 @@ const INFIPAY_STRIPE_FEE_DISPLAY_ORDER_CURRENCY = true;
 
 const METAKEY_INFIPAY_STRIPE_PROXY_URL = '_infipay_stripe_proxy_url';
 
-const OPT_INFIPAY_STRIPE_VERSION = '0.1.2';
+const OPT_INFIPAY_STRIPE_VERSION = '1.0.0';
 const METAKEY_INFIPAY_STRIPE_FEE      = '_infipay_stripe_fee';
 const METAKEY_INFIPAY_STRIPE_PAYOUT   = '_infipay_stripe_payout';
 const METAKEY_INFIPAY_STRIPE_CURRENCY = '_infipay_stripe_currency';
@@ -114,7 +114,7 @@ class Infipay_WC_Multi_Stripe_Payment_Gateway extends WC_Payment_Gateway{
 	 * Admin Panel Options
 	 * - Options for bits like 'title' and availability on a country-by-country basis
 	 *
-	 * @since 0.1.0
+	 * @since 1.0.0
 	 * @return void
 	 */
 	public function admin_options() {

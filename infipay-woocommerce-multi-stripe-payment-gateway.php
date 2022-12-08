@@ -2,7 +2,7 @@
 /* @wordpress-plugin
  * Plugin Name:       Infipay WooCommerce Multi Stripe Payment Gateway
  * Description:       The plugin allows the use of multiple Stripe accounts in the same shop. These plugins are required to use: WP Session Manager.
- * Version:           0.1.1
+ * Version:           0.1.2
  * WC requires at least: 5.0
  * WC tested up to: 5.9.3
  * Author:            TungPG

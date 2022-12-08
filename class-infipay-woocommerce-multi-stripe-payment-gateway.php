@@ -1,5 +1,5 @@
 <?php 
-error_reporting(E_ERROR | E_WARNING | E_PARSE);
+//error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 const INFIPAY_STRIPE_FEE_DISPLAY_ORDER_CURRENCY = true;
 
@@ -25,7 +25,7 @@ if ( ! class_exists('InfipayStripeUpdateChecker') ) {
             $this->cache_key     = 'infipay_stripe_update_checker';
             $this->cache_allowed = true;
             
-            add_filter( 'plugins_api', [ $this, 'info' ], 10, 3 );
+            add_filter( 'plugins_api', [ $this, 'info' ], 20, 3 );
             add_filter( 'site_transient_update_plugins', [ $this, 'update' ] );
             add_action( 'upgrader_process_complete', [ $this, 'purge' ], 10, 2 );
         }

@@ -28,7 +28,7 @@ $active_plugins = apply_filters('active_plugins', get_option('active_plugins'));
 if(infipay_stripe_payment_is_woocommerce_active()){
 	add_filter('woocommerce_payment_gateways', 'infipay_add_multi_stripe_payment_gateway');
 	function infipay_add_multi_stripe_payment_gateway( $gateways ){
-		$gateways[] = 'Infipay_woocommerce_Multi_Stripe_Payment_Gateway';
+		$gateways[] = 'Infipay_Woocommerce_Multi_Stripe_Payment_Gateway';
 		return $gateways; 
 	}
 

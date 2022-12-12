@@ -379,8 +379,8 @@ class Infipay_WooCommerce_Multi_Stripe_Payment_Gateway extends WC_Payment_Gatewa
 	    $params['transaction_id'] = $order->get_transaction_id();
 	    $params['amount'] = $this->get_stripe_amount($amount, $order->get_currency());
 	    $params['reason'] = $reason;
-	    $params["merchant_site"] = get_home_url();
-	    $params['currency'] = $order->get_currency();
+	    //$params["merchant_site"] = get_home_url();
+	    //$params['currency'] = $order->get_currency();
 	    
 	    //Get the proxy url when this order was made
 	    

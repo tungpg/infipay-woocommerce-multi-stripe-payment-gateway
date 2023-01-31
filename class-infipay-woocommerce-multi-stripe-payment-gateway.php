@@ -321,7 +321,13 @@ class Infipay_WooCommerce_Multi_Stripe_Payment_Gateway extends WC_Payment_Gatewa
 	            'result' => 'success',
 	            'redirect' => $order->get_checkout_order_received_url()
 	        ];
-	    } else {
+	    } else if($body->status === 'requires_action'){
+	        $order->update_status('failed');	        
+	        $order->add_order_note('3D Secure Required');
+	        
+	        wc_add_notice('Invalid card, please try again.', 'error');
+	        return false;
+	    }else {
 	        error_log(print_r($response, true));
 	        update_post_meta($order->get_id(), METAKEY_INFIPAY_STRIPE_PROXY_URL, $activatedProxy->payment_shop_domain);
 	        // Empty cart

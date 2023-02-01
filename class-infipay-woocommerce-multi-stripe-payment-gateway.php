@@ -5,7 +5,7 @@ const INFIPAY_STRIPE_FEE_DISPLAY_ORDER_CURRENCY = true;
 
 const METAKEY_INFIPAY_STRIPE_PROXY_URL = '_infipay_stripe_proxy_url';
 
-const OPT_INFIPAY_STRIPE_VERSION = '1.0.0';
+const OPT_INFIPAY_STRIPE_VERSION = '1.0.1';
 const METAKEY_INFIPAY_STRIPE_FEE      = '_infipay_stripe_fee';
 const METAKEY_INFIPAY_STRIPE_PAYOUT   = '_infipay_stripe_payout';
 const METAKEY_INFIPAY_STRIPE_CURRENCY = '_infipay_stripe_currency';

@@ -345,14 +345,13 @@ class Infipay_WooCommerce_Multi_Stripe_Payment_Gateway extends WC_Payment_Gatewa
 	            wc_add_notice('The selected payment method is suspended, Please contact merchant for more information.', 'error');
 	            return false;
 	        } else {
-	            $err = $body->error_message;
 	            if (isset($body->payment_intent->id)) {
 	                $paymentIntentId = $body->payment_intent->id;
 	                update_post_meta($order->get_id(), '_transaction_id', $paymentIntentId);
 	            }
 	            $order->add_order_note(sprintf(__('Stripe charged ERROR by proxy %s, ERROR message: %s, Payment Intent ID: %s', 'infipay'),
 	                $activatedProxy->payment_shop_domain,
-	                is_string($err) ?: $err->message,
+	                is_string($err) ?: $body->error_message,
 	                $paymentIntentId
 	                ));
 	        }

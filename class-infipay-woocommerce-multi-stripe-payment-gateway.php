@@ -266,7 +266,7 @@ class Infipay_WooCommerce_Multi_Stripe_Payment_Gateway extends WC_Payment_Gatewa
 	    $body = wp_remote_retrieve_body($response);
 	    $body = json_decode($body);
 	    
-	    if ($body->status === 'success') {
+	    if ($body->status === 'succeeded') {
 	        $paymentIntent = $body->payment_intent;
 	        $order->payment_complete();
 	        $order->reduce_order_stock();
@@ -333,7 +333,7 @@ class Infipay_WooCommerce_Multi_Stripe_Payment_Gateway extends WC_Payment_Gatewa
 	        // Empty cart
 	        $order->update_status('failed');
 	        if($body->code === 'domain_whitelist_not_allow') {
-	            $order->add_order_note(sprintf(__('Stripe charged ERROR by proxy %s, ERROR message: %s', 'infipay'),
+	            $order->add_order_note(sprintf(__('Stripe charged ERROR by proxy %s, ERROR message: %s', $activatedProxy->payment_shop_domain, $body->error_message),
 	                $activatedProxy->payment_shop_domain,
 	                'Domain whitelist is required'
 	                ));

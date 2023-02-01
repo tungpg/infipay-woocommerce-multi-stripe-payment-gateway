@@ -333,7 +333,7 @@ class Infipay_WooCommerce_Multi_Stripe_Payment_Gateway extends WC_Payment_Gatewa
 	        // Empty cart
 	        $order->update_status('failed');
 	        if($body->code === 'domain_whitelist_not_allow') {
-	            $order->add_order_note(sprintf(__('Stripe charged ERROR by proxy %s, ERROR message: %s', $activatedProxy->payment_shop_domain, $body->error_message),
+	            $order->add_order_note(sprintf(__('Stripe charged ERROR by proxy %s, ERROR message: %s', 'infipay'),
 	                $activatedProxy->payment_shop_domain,
 	                'Domain whitelist is required'
 	                ));
@@ -345,10 +345,9 @@ class Infipay_WooCommerce_Multi_Stripe_Payment_Gateway extends WC_Payment_Gatewa
 	            wc_add_notice('The selected payment method is suspended, Please contact merchant for more information.', 'error');
 	            return false;
 	        } else {
-	            $err = $body->err;
-	            $paymentIntentId = $order->get_transaction_id();
-	            if (isset($err->payment_intent)) {
-	                $paymentIntentId = $err->payment_intent->id;
+	            $err = $body->error_message;
+	            if (isset($body->payment_intent->id)) {
+	                $paymentIntentId = $body->payment_intent->id;
 	                update_post_meta($order->get_id(), '_transaction_id', $paymentIntentId);
 	            }
 	            $order->add_order_note(sprintf(__('Stripe charged ERROR by proxy %s, ERROR message: %s, Payment Intent ID: %s', 'infipay'),

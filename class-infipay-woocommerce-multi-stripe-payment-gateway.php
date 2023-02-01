@@ -321,7 +321,7 @@ class Infipay_WooCommerce_Multi_Stripe_Payment_Gateway extends WC_Payment_Gatewa
 	            'result' => 'success',
 	            'redirect' => $order->get_checkout_order_received_url()
 	        ];
-	    } else if($body->status === 'requires_action'){
+	    } elseif($body->status === 'requires_action'){
 	        $order->update_status('failed');	        
 	        $order->add_order_note('3D Secure Required');
 	        

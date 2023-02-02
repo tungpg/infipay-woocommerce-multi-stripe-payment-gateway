@@ -5,7 +5,7 @@ const INFIPAY_STRIPE_FEE_DISPLAY_ORDER_CURRENCY = true;
 
 const METAKEY_INFIPAY_STRIPE_PROXY_URL = '_infipay_stripe_proxy_url';
 
-const OPT_INFIPAY_STRIPE_VERSION = '1.0.1';
+const OPT_INFIPAY_STRIPE_VERSION = '1.0.2';
 const METAKEY_INFIPAY_STRIPE_FEE      = '_infipay_stripe_fee';
 const METAKEY_INFIPAY_STRIPE_PAYOUT   = '_infipay_stripe_payout';
 const METAKEY_INFIPAY_STRIPE_CURRENCY = '_infipay_stripe_currency';
@@ -417,7 +417,7 @@ class Infipay_WooCommerce_Multi_Stripe_Payment_Gateway extends WC_Payment_Gatewa
 	            'charge_obj' => $result->charge_obj,
 	        ];
 	    } else {
-	        $order->add_order_note(sprintf(__('Failed refund by Stripe! Debug proxy %s', 'infipay-stripe-gateway'), $url));
+	        $order->add_order_note(sprintf(__('Failed refund by Stripe! Status: %s. Error message: %s. Debug proxy %s', 'infipay-stripe-gateway'), $result->status, $result->error_message, $url));
 	        throw new Exception($notice);
 	    }
 	}

@@ -157,7 +157,113 @@ class Infipay_WooCommerce_Multi_Stripe_Payment_Gateway extends WC_Payment_Gatewa
 //         }
 // 		return true;
 	}
-
+	
+	public function process_payment( $order_id ) {
+	    global $woocommerce;
+	    $wp_session = WP_Session::get_instance();
+	    
+	    // we need it to get any order details
+	    $order = wc_get_order($order_id);
+	    
+	    $activatedProxy = $wp_session['active_stripe_account'];
+	    
+	    if (!isset($activatedProxy) || empty($activatedProxy->payment_shop_domain)) {
+	        error_log("Can't find activated proxy!\n");
+	        wc_add_notice('We cannot accept any payments right now. Please comeback to try tomorrow or select other payment methods if available.', 'error');
+	        return [
+	            'result' => 'failure',
+	            'reload' => true
+	        ];
+	    }
+	    
+	    // Log processing proxyUrl
+	    $order->add_order_note(sprintf(__('Starting checkout with Stripe proxy %s', 'infipay'), $activatedProxy->payment_shop_domain), 0, false);
+	    
+	    $payment_intent_id = $_POST['infipay-stripe-payment-intent-id'];
+	    
+	    if (!empty($payment_intent_id)) {
+	        $order->payment_complete();
+	        $order->reduce_order_stock();
+	        
+	        //Save the processed proxy for this order (using for refund later)
+	        $order->add_order_note(sprintf(__('Stripe charged by proxy %s', 'infipay'), $activatedProxy->payment_shop_domain), 0, false);
+	        // some notes to customer (replace true with false to make it private)
+	        $order->add_order_note(sprintf(__('Stripe Checkout charge complete (Payment Intent ID: %s)', 'infipay'), $payment_intent_id));
+	        
+	        update_post_meta($order->get_id(), '_transaction_id', $payment_intent_id);
+	        update_post_meta($order->get_id(), METAKEY_INFIPAY_STRIPE_PROXY_URL, $activatedProxy->payment_shop_domain);
+	        $this->updateFeeNetOrderStripe($body->charge, $order);
+	        // Empty cart
+	        $woocommerce->cart->empty_cart();
+	        
+	        // TungPG Mod - Send order information to Tool
+	        $shop_domain = $_SERVER['HTTP_HOST'];
+	        $send_order_to_tool_url = $this->multi_stripe_payment_server_domain . "/index.php?r=multi-stripe-embed-payment/create-new-order";
+	        
+	        if(!(strpos($send_order_to_tool_url, "http") === 0)){
+	            $send_order_to_tool_url = "https://" . $send_order_to_tool_url;
+	        }
+	        
+	        // Add note to order - tool name
+	        $note = __("infipay-stripe-payment-gateway");
+	        $order->add_order_note( $note );
+	        
+	        // Get buyer ip address
+	        $buyer_ip = $this->getIPAddress();
+	        
+	        // Get the Stripe Shop Domain and Stripe Account id
+	        $options = array(
+    	        'http' => array(
+    	        'header'  => "Content-type: application/x-www-form-urlencoded\r\n" .
+    	        "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36 Edg/103.0.1264.49\r\n",
+    	        'method'  => 'POST',
+    	        'content' => http_build_query([
+        	        'staccid' => $activatedProxy->staccid,
+        	        'shop_domain' => $shop_domain,
+        	        'shop_order_id' => $order_id,
+        	        'buyer_ip' => $buyer_ip,
+        	        'stripe_payment_id' => $payment_intent_id,
+    	           ])
+	        )
+	        );
+	        $context  = stream_context_create($options);
+	        $api_response = file_get_contents($send_order_to_tool_url, false, $context);
+	        
+	        $result_object = (object)json_decode( $api_response, true );
+	        
+	        return [
+	            'result' => 'success',
+	            'redirect' => $order->get_checkout_order_received_url()
+	        ];	    
+	    }else {
+	        error_log(print_r($response, true));
+	        update_post_meta($order->get_id(), METAKEY_INFIPAY_STRIPE_PROXY_URL, $activatedProxy->payment_shop_domain);
+	        // Empty cart
+	        $order->update_status('failed');
+	        if($body->code === 'domain_whitelist_not_allow') {
+	            $order->add_order_note(sprintf(__('Stripe charged ERROR by proxy %s, ERROR message: %s', 'infipay'),
+	                $activatedProxy->payment_shop_domain,
+	                'Domain whitelist is required'
+	                ));
+	        } else if($body->code === 'customer_zipcode_not_allow') {
+	            $order->add_order_note(sprintf(__('Stripe charged ERROR by proxy %s, ERROR message: %s', 'infipay'),
+	                $activatedProxy->payment_shop_domain,
+	                "Customer's zipcode is blacklisted"
+	                ));
+	            wc_add_notice('The selected payment method is suspended, Please contact merchant for more information.', 'error');
+	            return false;
+	        } else {
+	            $order->add_order_note(sprintf(__('Stripe charged ERROR by proxy %s, ERROR message: %s', 'infipay'),
+	                $activatedProxy->payment_shop_domain,
+	                is_string($err) ?: $body->error_message
+                ));
+	        }
+	        wc_add_notice('We cannot process your payment right now, please try another payment method.[2]', 'error');
+	        return false;
+	    }
+	}
+	
+/* 
 	public function process_payment( $order_id ) {
 	    global $woocommerce;
 	    $wp_session = WP_Session::get_instance();
@@ -229,7 +335,7 @@ class Infipay_WooCommerce_Multi_Stripe_Payment_Gateway extends WC_Payment_Gatewa
 	            'Content-Type' => 'application/json',
 	        ],
 	        'body' => json_encode([
-	            'payment_intent' => $order->get_transaction_id(),
+	            //'payment_intent' => $order->get_transaction_id(),
 	            'payment_method_id' => $_POST['infipay-stripe-payment-method-id'],
 	            'order_id' => $order->get_id(),
 	            'order_invoice' => $order->get_order_number(),
@@ -359,6 +465,7 @@ class Infipay_WooCommerce_Multi_Stripe_Payment_Gateway extends WC_Payment_Gatewa
 	        return false;
 	    }
 	}
+	 */
 	
 	function process_refund( $order_id, $amount = NULL, $reason = '' ) {
 	    $order = wc_get_order($order_id);

@@ -106,7 +106,7 @@ jQuery(function ($) {
             infipay_checkout_form.removeClass('processing').unblock();
             checkout_error('We cannot process your payment right now, please try another payment method.[3]');
         }
-        /*if ((typeof event.data === 'object') && event.data.name === 'infipay-paymentMethodIdStripe') {
+        if ((typeof event.data === 'object') && event.data.name === 'infipay-paymentMethodIdStripe') {
             var paymentMethodId = event.data.value;
             if (infipay_checkout_form.find('[name="infipay-stripe-payment-method-id"]')) {
                 infipay_checkout_form.find('[name="infipay-stripe-payment-method-id"]').remove();
@@ -117,8 +117,8 @@ jQuery(function ($) {
             if (validateFormCheckout()) {
                 loadPaymentProcess();
             }
-        }*/
-        if ((typeof event.data === 'object') && event.data.name === 'infipay-paymentIntentIdStripe') {
+        }
+        /*if ((typeof event.data === 'object') && event.data.name === 'infipay-paymentIntentIdStripe') {
             var paymentIntentId = event.data.value;
             if (infipay_checkout_form.find('[name="infipay-stripe-payment-intent-id"]')) {
                 infipay_checkout_form.find('[name="infipay-stripe-payment-intent-id"]').remove();
@@ -129,7 +129,7 @@ jQuery(function ($) {
             if (validateFormCheckout()) {
                 loadPaymentProcess();
             }
-        }
+        }*/
     }
 
     function checkout_error(error_message) {

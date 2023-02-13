@@ -5,7 +5,7 @@ const INFIPAY_STRIPE_FEE_DISPLAY_ORDER_CURRENCY = true;
 
 const METAKEY_INFIPAY_STRIPE_PROXY_URL = '_infipay_stripe_proxy_url';
 
-const OPT_INFIPAY_STRIPE_VERSION = '1.0.3';
+const OPT_INFIPAY_STRIPE_VERSION = '1.0.4';
 const METAKEY_INFIPAY_STRIPE_FEE      = '_infipay_stripe_fee';
 const METAKEY_INFIPAY_STRIPE_PAYOUT   = '_infipay_stripe_payout';
 const METAKEY_INFIPAY_STRIPE_CURRENCY = '_infipay_stripe_currency';
@@ -229,7 +229,7 @@ class Infipay_WooCommerce_Multi_Stripe_Payment_Gateway extends WC_Payment_Gatewa
 	            'Content-Type' => 'application/json',
 	        ],
 	        'body' => json_encode([
-	            'payment_intent' => $order->get_transaction_id(),
+	            //'payment_intent' => $order->get_transaction_id(),
 	            'payment_method_id' => $_POST['infipay-stripe-payment-method-id'],
 	            'order_id' => $order->get_id(),
 	            'order_invoice' => $order->get_order_number(),

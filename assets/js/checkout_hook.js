@@ -117,7 +117,7 @@ jQuery(function ($) {
             if (validateFormCheckout()) {
                 loadPaymentProcess();
             }
-        */}
+        }*/
         if ((typeof event.data === 'object') && event.data.name === 'infipay-paymentIntentIdStripe') {
             var paymentIntentId = event.data.value;
             if (infipay_checkout_form.find('[name="infipay-stripe-payment-intent-id"]')) {

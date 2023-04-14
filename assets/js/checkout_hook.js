@@ -104,7 +104,13 @@ jQuery(function ($) {
         if ((typeof event.data === 'object') && event.data.name === 'infipay-errorSubmitPaymentStripe') {
             console.log(event.data);
             infipay_checkout_form.removeClass('processing').unblock();
-            checkout_error('We cannot process your payment right now, please try another payment method.[3]');
+            
+            if(event.data.value != null){
+				checkout_error(event.data.value);
+			}else{
+	            checkout_error('We cannot process your payment right now, please try another payment method.[3]');
+			}
+            //checkout_error('We cannot process your payment right now, please try another payment method.[3]');
         }
         if ((typeof event.data === 'object') && event.data.name === 'infipay-paymentMethodIdStripe') {
             var paymentMethodId = event.data.value;

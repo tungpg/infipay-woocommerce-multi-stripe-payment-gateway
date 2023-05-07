@@ -356,8 +356,7 @@ class Infipay_WooCommerce_Multi_Stripe_Payment_Gateway extends WC_Payment_Gatewa
 	                ));
 	        }
 	        if(!empty($body->error_message)){
-	            $woocommerce->add_error($body->error_message);
-	            //wc_add_notice($body->error_message);
+	            wc_add_notice($body->error_message, 'error');
 	        }else{
 	            wc_add_notice('We cannot process your payment right now, please try another payment method.[2]', 'error');
 	        }

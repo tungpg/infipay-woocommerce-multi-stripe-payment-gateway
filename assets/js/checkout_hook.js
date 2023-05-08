@@ -24,7 +24,7 @@ jQuery(function ($) {
             window.infipay_stripe_checkout_error = false;
             e.preventDefault();
             if (validateFormCheckout()) {
-                $('#payment-area')[0].contentWindow.postMessage({
+                $('#stripe-payment-area')[0].contentWindow.postMessage({
                     name: 'infipay-submitFormStripe',
                     value: {
                         billing_details: {

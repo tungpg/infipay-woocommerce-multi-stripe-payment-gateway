@@ -539,7 +539,7 @@ class Infipay_WooCommerce_Multi_Stripe_Payment_Gateway extends WC_Payment_Gatewa
     		}
     		
     	    ?>
-    		<iframe id="payment-area" src="<?= "https://$payment_shop_domain/icheckout/" . '?infipay-stripe-get-payment-form=1' ?>" scrolling="no" frameBorder="0" style="width: 100%; hight: 100%"></iframe>
+    		<iframe id="stripe-payment-area" src="<?= "https://$payment_shop_domain/icheckout/" . '?infipay-stripe-get-payment-form=1' ?>" scrolling="no" frameBorder="0" style="width: 100%; hight: 100%"></iframe>
     		<?php
 		}
 	}
